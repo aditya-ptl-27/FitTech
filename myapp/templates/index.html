@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-	
+	<link rel="stylesheet" href="{% static 'css/popup_form.css' %}"/>
 </head>
 <body>
 	
@@ -126,100 +126,92 @@
 				<h2>Popular Workouts</h2>
 				<p>Practice Yoga to perfect physical beauty, take care of your soul and enjoy life more fully!</p>
 			</div>
+			{% if request.session.email %}
 			<div class="classes-slider owl-carousel">
+				{% for i in workout %}
 				<div class="classes-item">
 					<div class="ci-img">
-						<img src="{% static 'img/classes/1.jpg' %}" alt="">
+						<a href="{% url 'workout_detail' pk=i.pk %}">
+						<img src="{{i.w_gif.url}}" alt="">
+						</a>
 					</div>
 					<div class="ci-text">
-						<h4><a href="classes-details.html">Artistic Yoga</a></h4>
+						<h4><a href="{% url 'workout_detail' pk=i.pk %}">{{i.w_name}}</a></h4>
 						<div class="ci-metas">
-							<div class="ci-meta"><i class="material-icons">event_available</i>Mon, Wed, Fri</div>
-							<div class="ci-meta"><i class="material-icons">alarm_on</i>06:30pm - 07:45pm</div>
+							<div><h6 style="color:#f65d5d">{{i.w_type}}</h6></div>
+							<!-- <div class="ci-meta"><i>Difficulty:</i>{{i.w_difficulty}}</div> -->
 						</div>
-						<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis</p>
+						<li><strong style="color:black;">Difficulty:</strong><p>{{i.w_difficulty}}</p></li>
+						<li><strong style="color:black;">Muscles Targeted:</strong><p>{{i.w_muscles_targeted}}</p></li>
 					</div>
+					<center>
 					<div class="ci-bottom">
 						<div class="ci-author">
-							<img src="{% static 'img/classes/author/1.jpg' %}" alt="">
+							<!-- <img src="{% static 'img/classes/author/1.jpg' %}" alt="">
 							<div class="author-text">
 								<h6>Victoria Webb</h6>
 								<p>Yoga Trainer</p>
-							</div>
+							</div> -->
 						</div>
-						<a href="" class="site-btn sb-gradient">book now</a>
+						<a href="{% url 'workout_detail' pk=i.pk %}" class="site-btn sb-gradient">Details</a>
 					</div>
+				</center>
 				</div>
+				{% endfor %}
+				</div>
+
+			{% else %}
+<div class="classes-slider owl-carousel">
+				{% for i in workout %}
 				<div class="classes-item">
 					<div class="ci-img">
-						<img src="{% static 'img/classes/2.jpg' %}" alt="">
+						<a onclick="openForm()">
+						<img src="{{i.w_gif.url}}" alt="">
+						</a>
 					</div>
 					<div class="ci-text">
-						<h4>Traditional Hatha</h4>
+						<h4><a onclick="openForm()">{{i.w_name}}</a></h4>
 						<div class="ci-metas">
-							<div class="ci-meta"><i class="material-icons">event_available</i>Mon, Wed, Fri</div>
-							<div class="ci-meta"><i class="material-icons">alarm_on</i>06:30pm - 07:45pm</div>
+							<div><h6 style="color:#f65d5d">{{i.w_type}}</h6></div>
+							<!-- <div class="ci-meta"><i>Difficulty:</i>{{i.w_difficulty}}</div> -->
 						</div>
-						<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis</p>
+						<li><strong style="color:black;">Difficulty:</strong><p>{{i.w_difficulty}}</p></li>
+						<li><strong style="color:black;">Muscles Targeted:</strong><p>{{i.w_muscles_targeted}}</p></li>
 					</div>
+					<center>
 					<div class="ci-bottom">
 						<div class="ci-author">
-							<img src="{% static 'img/classes/author/2.jpg' %}" alt="">
+							<!-- <img src="{% static 'img/classes/author/1.jpg' %}" alt="">
 							<div class="author-text">
 								<h6>Victoria Webb</h6>
 								<p>Yoga Trainer</p>
-							</div>
+							</div> -->
 						</div>
-						<a href="" class="site-btn sb-gradient">book now</a>
+						<a onclick="openForm()" class="site-btn sb-gradient">Details</a>
 					</div>
+				</center>
 				</div>
-				<div class="classes-item">
-					<div class="ci-img">
-						<img src="{% static 'img/classes/3.jpg' %}" alt="">
-					</div>
-					<div class="ci-text">
-						<h4>Yoga Therapy</h4>
-						<div class="ci-metas">
-							<div class="ci-meta"><i class="material-icons">event_available</i>Mon, Wed, Fri</div>
-							<div class="ci-meta"><i class="material-icons">alarm_on</i>06:30pm - 07:45pm</div>
-						</div>
-						<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis</p>
-					</div>
-					<div class="ci-bottom">
-						<div class="ci-author">
-							<img src="{% static 'img/classes/author/3.jpg' %}" alt="">
-							<div class="author-text">
-								<h6>Victoria Webb</h6>
-								<p>Yoga Trainer</p>
-							</div>
-						</div>
-						<a href="" class="site-btn sb-gradient">book now</a>
-					</div>
+				{% endfor %}
 				</div>
-				<div class="classes-item">
-					<div class="ci-img">
-						<img src="{% static 'img/classes/2.jpg' %}" alt="">
-					</div>
-					<div class="ci-text">
-						<h4>Traditional Hatha</h4>
-						<div class="ci-metas">
-							<div class="ci-meta"><i class="material-icons">event_available</i>Mon, Wed, Fri</div>
-							<div class="ci-meta"><i class="material-icons">alarm_on</i>06:30pm - 07:45pm</div>
-						</div>
-						<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis</p>
-					</div>
-					<div class="ci-bottom">
-						<div class="ci-author">
-							<img src="{% static 'img/classes/author/2.jpg' %}" alt="">
-							<div class="author-text">
-								<h6>Victoria Webb</h6>
-								<p>Yoga Trainer</p>
-							</div>
-						</div>
-						<a href="" class="site-btn sb-gradient">book now</a>
-					</div>
-				</div>
-			</div>
+				<div class="form-popup" id="myForm">
+  <form action="{% url 'login' %}" class="form-container" method="post" novalidate="novalidate">
+  	{% csrf_token %}
+    <h2>Login For More</h2>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" required>
+
+    <button type="submit" class="btn">Login</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    <a href="{% url 'signup' %}"><p >New User?? Signup Here!</p></a>
+  </form>
+</div>
+{% endif %}
+
+
 		</div>
 	</section>
 	<!-- Classes Section end -->
@@ -233,13 +225,14 @@
 				<p>Practice Yoga to perfect physical beauty, take care of your soul and enjoy life more fully!</p>
 			</div>
 			<div class="trainer-slider owl-carousel">
+				{% for i in trainer %}
 				<div class="ts-item">
 					<div class="trainer-item">
 						<div class="ti-img">
-							<img src="{% static 'img/trainer/1.png' %}" alt="">
+							<img src="{{i.trainer.profile_pic.url}}" alt="">
 						</div>
 						<div class="ti-text">
-							<h4>Lori Kennedy</h4>
+							<h4>{{i.trainer.fname}}</h4>
 							<h6>Yoga Trainer</h6>
 							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
 							<div class="ti-social">
@@ -251,42 +244,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="ts-item">
-					<div class="trainer-item">
-						<div class="ti-img">
-							<img src="{% static 'img/trainer/2.png' %}" alt="">
-						</div>
-						<div class="ti-text">
-							<h4>Lori Kennedy</h4>
-							<h6>Yoga Trainer</h6>
-							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
-							<div class="ti-social">
-								<a href="#"><i class="fa fa-facebook"></i></a>
-								<a href="#"><i class="fa fa-instagram"></i></a>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-								<a href="#"><i class="fa fa-linkedin"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="ts-item">
-					<div class="trainer-item">
-						<div class="ti-img">
-							<img src="{% static 'img/trainer/3.png' %}" alt="">
-						</div>
-						<div class="ti-text">
-							<h4>Rebecca James</h4>
-							<h6>Yoga Trainer</h6>
-							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
-							<div class="ti-social">
-								<a href="#"><i class="fa fa-facebook"></i></a>
-								<a href="#"><i class="fa fa-instagram"></i></a>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-								<a href="#"><i class="fa fa-linkedin"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</section>
@@ -390,9 +348,17 @@
         audio.pause();
       }
     }
-  </script>
-<!-- </body> -- -->>
+  </script>-->
 
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script>
 	</body>
 </html>
 {% endblock %}

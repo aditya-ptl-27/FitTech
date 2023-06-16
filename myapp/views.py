@@ -6,7 +6,9 @@ import random
 
 # Create your views here.
 def index(request):
-	return render(request,'index.html')
+	workout=Workout.objects.all()
+	# trainer=workout.trainer
+	return render(request,'index.html',{'workout':workout})
 
 def signup(request):
 	if request.method=='POST':
