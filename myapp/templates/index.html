@@ -42,8 +42,19 @@
 								<div class="hs-text-warp">
 									<div class="hs-text">
 										<h2>Get slim and toned with yoga</h2>
+
+										{% if request.session.email %}
+
 										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nos-trud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+										
+										{% else %}
+
+										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nos-trud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+										<a href="{% url 'signup' %}">
 										<div class="site-btn sb-white">Register now</div>
+										</a>
+										{% endif %}
+										
 									</div>
 								</div>
 							</div>
@@ -56,8 +67,17 @@
 					<div class="container">
 						<div class="hs-text">
 							<h2>Reduce your stress</h2>
-							<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.</p>
-							<div class="site-btn sb-white">Register now</div>
+							{% if request.session.email %}
+
+										<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi. </p>
+										
+										{% else %}
+
+										<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi. </p>
+										<a href="{% url 'signup' %}">
+										<div class="site-btn sb-white">Register now</div>
+										</a>
+										{% endif %}
 						</div>
 					</div>
 					<div class="hs-img">
@@ -90,7 +110,7 @@
 						</div>
 						<div class="ai-text">
 							<h4>Full Rejuvenation</h4>
-							<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+							<p>Full body rejuvenation includes anti- aging and skin rejuvenation treatments.</p>
 						</div>
 					</div>
 					<div class="about-item">
@@ -111,7 +131,7 @@
 							<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
 						</div>
 					</div>
-					<a href="" class="site-btn sb-gradient mt-5">explore more</a>
+					<a href="{% url 'home_workouts' %}" class="site-btn sb-gradient mt-5">explore more</a>
 				</div>
 			</div>
 		</div>
@@ -124,7 +144,7 @@
 			<div class="section-title text-center">
 				<img src="{% static 'img/fit_logo1.png' %}" height="100px" width="100px" alt="">
 				<h2>Popular Workouts</h2>
-				<p>Practice Yoga to perfect physical beauty, take care of your soul and enjoy life more fully!</p>
+				<p>Exercise regularly to get perfect physical beauty, take care of your soul and enjoy life more fully!</p>
 			</div>
 			{% if request.session.email %}
 			<div class="classes-slider owl-carousel">
@@ -229,11 +249,11 @@
 				<div class="ts-item">
 					<div class="trainer-item">
 						<div class="ti-img">
-							<img src="{{i.trainer.profile_pic.url}}" alt="">
+							<img height="250px" src="{{i.profile_pic.url}}" alt="">
 						</div>
 						<div class="ti-text">
-							<h4>{{i.trainer.fname}}</h4>
-							<h6>Yoga Trainer</h6>
+							<h4>{{i.fname}}</h4>
+							<h6>Gym Trainer</h6>
 							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
 							<div class="ti-social">
 								<a href="#"><i class="fa fa-facebook"></i></a>
@@ -292,64 +312,7 @@
 		</div>
 	</section>
 	<!-- Review Section end -->
-
-
-
-	<!-- Sign up Section -->
-	<section class="signup-section spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="signup-map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d33245.297803635964!2d-73.76987401620775!3d40.704774398815005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1575866843291!5m2!1sen!2sbd" style="border:0;" allowfullscreen=""></iframe></div>
-				</div>
-				<div class="col-lg-6">
-					<div class="singup-text">
-						<h3>Sign Up for Our Classes</h3>
-						<p>To be invited to the nearest Cali center and get free physical advice to learn more about the program.</p>
-					</div>
-					<form class="singup-form">
-						<div class="row">
-							<div class="col-md-6">
-								<input type="text" placeholder="First Name">
-							</div>
-							<div class="col-md-6">
-								<input type="text" placeholder="Last Name">
-							</div>
-							<div class="col-md-6">
-								<input type="text" placeholder="Your Email">
-							</div>
-							<div class="col-md-6">
-								<input type="text" placeholder="Phone Number">
-							</div>
-							<div class="col-md-12">
-								<textarea placeholder="Message"></textarea>
-								<a href="#" class="site-btn sb-gradient">Get started</a>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Sign up Section end -->
-<!-- <body> -->
-  <!-- Other website content goes here -->
-  
-<!--   <audio id="bg-music" src="{% static 'bg_music/meditation_music_01.mp3' %}" autoplay loop></audio>
-  
-  <button onclick="toggleBackgroundMusic()">Play Music</button>
-  
-  <script>
-    function toggleBackgroundMusic() {
-      var audio = document.getElementById('bg-music');
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    }
-  </script>-->
-
+<br><br><br>
 <script>
 function openForm() {
   document.getElementById("myForm").style.display = "block";
