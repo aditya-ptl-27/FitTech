@@ -1,0 +1,87 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>SIGN UP</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-8">
+          <h3 style="color:#f65d5d">Didn't Registered Yet??</h3>
+          {% if msg %}
+            <b style="color:blue;">{{msg}}</b>
+            {% endif %}
+            <br><br>
+          <form action="{% url 'signup' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            
+              <div class="form-group">
+                <select name="usertype" class="form-control" required>
+                  <option>---Select User Type---</option>
+                  <option value="user">User</option>
+                  <option value="trainer">Trainer</option>
+                </select>
+              </div>
+              <div class="row">
+              <div class="col-md-6">
+                <input type="text" placeholder="First Name" name="fname" value="{{user.fname}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Last Name" name="lname" value="{{user.lname}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Email" name="email" value="{{user.email}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Mobile" name="mobile" value="{{user.mobile}}">
+              </div>
+              <div class="col-md-6">
+                <input type="file" placeholder="Profile Pic" name="profile_pic" value="{{user.profile_pic}}" required />
+              </div>
+              <div class="col-md-6">
+              
+              <input type="password" placeholder="Password" name="password" />
+            </div>
+            <div class="col-md-6">
+              
+              <input type="password" placeholder="Confirm Password" name="cpassword" />
+            </div>
+            
+            </div>
+            <center>
+              <button type="submit" value="submit" class="site-btn sb-gradient">SIGN UP</button>
+            </center>
+          </form>
+        </div>
+        </center>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section end -->
+
+
+  </body>
+</html>
+{% endblock %}

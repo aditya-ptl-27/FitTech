@@ -1,0 +1,138 @@
+{% extends 'trainer_header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <style>
+/*body {margin:25px;}*/
+
+div.polaroid {
+  width: 200px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-bottom: 25px;
+  border-radius: 25px
+}
+
+img.workout {border-radius: 25px}
+
+div.container {
+  text-align: center;
+  padding: 10px 20px;
+}
+</style>
+</head>
+<body>
+  
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>Home Workouts</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="polaroid">
+          <a href="{% url 'build_muscle' %}">
+            <img src="{% static 'img/workouts/build_muscle.webp' %}" class="img workout" alt="5 Terre" style="width:100%">
+            
+            <div class="container">
+            <p>Build Muscle</p>
+            </div>
+            </a>
+          </div>
+      </div>
+
+
+    <div class="col-md-4">
+      <div class="polaroid">
+        <a href="#">  
+          <img src="{% static 'workout_gif/pushups01.gif' %}" class="img workout" alt="5 Terre" style="width:100%">
+          
+          <div class="container">
+            <p>Gain Strength</p>
+          </div>
+          </a>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+      <div class="polaroid">
+        <a href="#">
+          <img src="{% static 'img/workouts/weight_loss.webp' %}" class="img workout" alt="5 Terre" style="width:100%">
+            <div class="container">
+              <p>Weigth Loss</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    
+
+    <div class="col-md-4">
+        <div class="polaroid">
+          <a href="#">
+            <img src="{% static 'img/workouts/get_fit.webp' %}" class="img workout" alt="5 Terre" style="width:100%">
+            <div class="container">
+            <p>Get Fit</p>
+            </div>
+            </a>
+          </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="polaroid">
+        <a href="{% url 'upper_body' %}">  
+          <img src="{% static 'img/workouts/upper_body1.jpg' %}" class="img workout" alt="5 Terre" height="280px" style="width:100%">
+          
+          <div class="container">
+            <p>Upper Body</p>
+          </div>
+          </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="polaroid">
+          <a href="#">
+            <img src="{% static 'img/workouts/full_body.webp' %}" class="img workout" alt="5 Terre" style="width:100%">
+            <div class="container">
+            <p>Full Body</p>
+            </div>
+            </a>
+          </div>
+    </div>
+    <div class="col-md-4">
+        <div class="polaroid">
+          <a href="#">
+            <img src="{% static 'img/workouts/lower_body.jpg' %}" class="img workout" alt="5 Terre" style="width:100%">
+            <div class="container">
+            <p>Lower Body</p>
+            </div>
+            </a>
+          </div>
+    </div>
+
+  </div>
+</div>
+  </section>
+  <!-- Trainers Section end -->
+
+  
+
+  </body>
+</html>
+{% endblock %}

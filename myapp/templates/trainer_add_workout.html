@@ -1,0 +1,99 @@
+{% extends 'trainer_header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>ADD WORKOUT</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-8">
+          {% if msg %}
+            <b style="color:blue;">{{msg}}</b>
+            {% endif %}
+            <br><br>
+          <form action="{% url 'trainer_add_workout' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            
+              <div class="form-group">
+                <select name="w_type" class="form-control" required>
+                  <option>---Select Workout Type---</option>
+                  <option id="upper_body" value="Upper Body">Upper Body</option>
+                  <option id="lower_body" value="Lower Body">Lower Body</option>
+                  <option id="full_body" value="Full Body">Full Body</option>
+                  <option id="build_muscle" value="Build Muscle">Build Muscle</option>
+                  <option id="gain_strength" value="Gain Strength">Gain Strength</option>
+                  <option id="weight_loss" value="Weight Loss">Weight Loss</option>
+                  <option id="get_fit" value="Get Fit">Get Fit</option>
+                </select>
+              </div>
+              <div class="row">
+              <div class="col-md-6">
+                <input type="text" placeholder="Workout Name" name="w_name" value="{{trainer.w_name}}">
+              </div>
+              <div class="col-md-6">
+                <pre><textarea name="w_description" placeholder="Workout Description" >
+                 {{trainer.w_description}} 
+                </textarea></pre>
+              </div>
+              <div class="col-md-6">
+                <select name="w_difficulty" class="form-control" required>
+                  <option>---Select Workout Difficulty---</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Muscles Targeted" name="w_muscles_targeted" value="{{trainer.w_muscles_targeted}}">
+              </div>
+            <div class="col-md-6">
+                <!-- <input type="file" placeholder="Upload Image or Gif" name="w_gif" value="{{trainer.w_gif}}" required /> -->
+                <div class="uploadOuter">
+                  <label for="uploadFile" class="btn btn-primary">Upload GIF</label>
+                  <strong>OR</strong>
+                <span class="dragBox" >
+                  Darg and Drop GIF here
+                  <input type="file" onChange="dragNdrop(event)"  ondragover="drag()" ondrop="drop()" name="w_gif" id="uploadFile"  />
+                </span>
+                </div>
+                <div id="preview"></div>
+              </div>
+            
+            </div>
+            <center>
+              <button type="submit" value="submit" class="site-btn sb-gradient">ADD WORKOUT</button>
+            </center>
+          </form>
+        </div>
+        </center>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section end -->
+
+
+  </body>
+</html>
+{% endblock %}

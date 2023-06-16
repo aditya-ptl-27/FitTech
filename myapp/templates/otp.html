@@ -1,0 +1,64 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>Enter OTP</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-20">
+          <h2>Enter OTP</h2>
+          <h6>Sent OTP Might Be In Spam</h6>
+          {% if msg %}
+            <b style="color:blue;">{{msg}}</b>
+            {% endif %}
+            <br><br>
+          <form action="{% url 'verify_otp' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            
+              <div class="form-group">
+                <input type="hidden" name="otp" value="{{otp}}">
+                <input type="hidden" name="email" value="{{email}}">
+              <div class="col-md-12">
+                <input type="text" placeholder="Enter OTP" name="uotp">
+              </div>
+              
+            
+            </div>
+            <center>
+              <button type="submit" value="submit" class="site-btn sb-gradient">VERIFY OTP</button>
+            </center>
+          </form>
+        </div>
+        </center>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section end -->
+
+
+  </body>
+</html>
+{% endblock %}

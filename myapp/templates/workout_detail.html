@@ -1,0 +1,96 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+
+</head>
+<body>
+	
+	<!-- Page top Section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-7 m-auto text-white">
+					<h2>Workout Details</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Page top Section end -->
+
+	<!-- Blog Details Section -->
+	<section class="blog-details-section spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="blog-details">
+						<div class="blog-preview">
+							<img height="400px" src="{{workout.w_gif.url}}" alt="">
+						</div>
+						<h2>{{workout.w_name}}</h2>
+						<!-- <div class="blog-meta"><p><i class="material-icons">alarm_on</i>120 Mins </p></div>
+						<div class="blog-meta"><p><i class="material-icons">people_outline</i>250 People Registered</p></div> -->
+						
+				        <h3 style="color:#f65d5d">{{workout.w_type}}</h3>
+				     	
+						<strong style="color:black;">Difficulty:</strong><p>{{workout.w_difficulty}}</p>
+						<strong style="color:black;">Muscles Targeted:</strong><p>{{workout.w_muscles_targeted}}</p>
+						<h3>Workout Details</h3>
+						<h5>{{workout.w_description}}</h5>
+						<br>
+						<div class="row">
+							<div class="col-sm-7">
+								<div class="ed-cata"><p><i class="material-icons">local_offer</i>Health</p></div>
+							</div>
+							<div class="col-sm-5 text-left text-sm-right pt-4 pt-sm-0">
+								<div class="ed-social">
+									<a href="#"><i class="fa fa-facebook"></i></a>
+									<a href="#"><i class="fa fa-instagram"></i></a>
+									<a href="#"><i class="fa fa-twitter"></i></a>
+									<a href="#"><i class="fa fa-linkedin"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-5 col-sm-8 sidebar">
+					
+					<div class="sb-widget">
+						<h2 class="sb-title">About Trainer</h2>
+						<div class="about-instructor-widget">
+							<img src="{{trainer.profile_pic.url}}" alt="">
+							<h4>{{trainer.fname}}</h4>
+							<h6>Gym Trainer</h6>
+							<p>Gym & Therapy Certificate of Uttarakhand University</p>
+							<div class="ai-social">
+								<a href="#"><i class="fa fa-facebook"></i></a>
+								<a href="#"><i class="fa fa-instagram"></i></a>
+								<a href="#"><i class="fa fa-twitter"></i></a>
+								<a href="#"><i class="fa fa-linkedin"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="sb-widget">
+						<h2 class="sb-title">Categories</h2>
+						<ul class="sb-list">
+							<li><a href="#">Health<span>(5)</span></a></li>
+							<li><a href="#">Nature<span>(7)</span></a></li>
+							<li><a href="#">Beauty<span>(3)</span></a></li>
+							<li><a href="#">Challenge<span>(10)</span></a></li>
+							<li><a href="#">Training<span>(12)</span></a></li>
+							<li><a href="#">Progress<span>(4)</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Blog Details Section end -->
+	
+	
+
+	</body>
+</html>
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <style>
+div.container_hover {
+  position : relative;
+  width : 1100px;
+  display : flex;
+  align-items : center;
+  justify-content : center;
+  flex-warp : warp;
+  padding : 30px;  
+}
+
+div.container_hover div.card {
+  position: relative;
+  max-width : 300px;
+  height : 215px;  
+  background-color : #fff;
+  margin : 30px 10px;
+  padding : 20px 15px;
+  
+  display : flex;
+  flex-direction : column;
+  box-shadow : 0 5px 20px rgba(0,0,0,0.5);
+  transition : 0.3s ease-in-out;
+  border-radius : 15px;
+}
+div.container_hover div.card:hover {
+  height : 320px;    
+}
+
+
+div.container_hover div.card .image {
+  position : relative;
+  width : 260px;
+  height : 260px;
+  
+  top : -40%;
+  left: 8px;
+  box-shadow : 0 5px 20px rgba(0,0,0,0.2);
+  z-index : 1;
+}
+
+div.container_hover div.card .image img {
+  max-width : 100%;
+  border-radius : 15px;
+}
+
+div.container_hover div.card .content {
+  position : relative;
+  top : -140px;
+  padding : 10px 15px;
+  color : #111;
+  text-align : center;
+  
+  visibility : hidden;
+  opacity : 0;
+  transition : 0.3s ease-in-out;
+    
+}
+
+div.container_hover div.card:hover .content {
+   margin-top : 30px;
+   visibility : visible;
+   opacity : 1;
+   transition-delay: 0.2s;
+  
+}
+div.polaroid {
+  width: 200px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-bottom: 25px;
+  border-radius: 25px
+}
+
+img.workout {border-radius: 25px
+height:200px;
+}
+
+div.container {
+  text-align: center;
+  padding: 10px 20px;
+}
+.top{
+  margin-top: 10px;
+  margin-left: 404px;
+}
+
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding:50px;
+}
+
+  </style>
+  <link rel="stylesheet" href="{% static 'css/popup_form.css' %}"/>
+</head>
+<body>
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}" >
+      <center>        
+    <div class="container">
+
+          <h2 style="color:white;">Gain Strength Workouts</h2>
+  </div>
+  </center>
+  </section>
+  <!-- Page top Section end -->
+  {% if request.session.email %}
+      <section class="events-page-section spad">
+    <div class="container">
+      <div class="row">
+        {% for workouts in workout %}
+        <a href="{% url 'workout_detail' pk=workouts.pk %}">
+        <div class="col-lg-4 col-md-6">
+          <div class="blog-item">
+            <img height="250px" width="100px" src="{{workouts.w_gif.url}}" alt="">
+            <div class="bi-text">
+              <h3>{{workouts.w_name}}</h3>
+              <div class = content>
+                
+                <h6 style="color:#f65d5d">{{workouts.w_type}}</h6>
+                <ul>
+              
+              <li><strong style="color:black;">Difficulty:</strong><p>{{workouts.w_difficulty}}</p></li>
+              <li><strong style="color:black;">Muscles Targeted:</strong><p>{{workouts.w_muscles_targeted}}</p></li>
+            </ul>
+              </div>
+              
+            </div>
+            <div class="bi-footer">
+              <div class="bi-cata">Health</div>
+              <div class="bi-social">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% empty %}
+    <h1>No workouts found.</h1>
+      {% endfor %}
+      
+      </div>
+    </div>
+
+  </section>
+  {% else %}
+
+    <section class="events-page-section spad">
+    <div class="container">
+      <div class="row">
+        {% for workouts in workout %}
+        <a onclick="openForm()">
+        <div class="col-lg-4 col-md-6">
+          <div class="blog-item">
+            <img height="250px" width="100px" src="{{workouts.w_gif.url}}" alt="">
+            <div class="bi-text">
+              <h3>{{workouts.w_name}}</h3>
+              <div class = content>
+                
+                <h6 style="color:#f65d5d">{{workouts.w_type}}</h6>
+                <ul>
+              
+              <li><strong style="color:black;">Difficulty:</strong><p>{{workouts.w_difficulty}}</p></li>
+              <li><strong style="color:black;">Muscles Targeted:</strong><p>{{workouts.w_muscles_targeted}}</p></li>
+            </ul>
+              </div>
+              
+            </div>
+            <div class="bi-footer">
+              <div class="bi-cata">Health</div>
+              <div class="bi-social">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+      <div class="form-popup" id="myForm">
+  <form action="{% url 'login' %}" class="form-container" method="post" novalidate="novalidate">
+    {% csrf_token %}
+    <h2>Login For More</h2>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" required>
+
+    <button type="submit" class="btn">Login</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    <a href="{% url 'signup' %}"><p>New User?? Signup Here!</p></a>
+  </form>
+</div>
+      {% empty %}
+    <h1>No workouts found.</h1>
+        {% endfor %}
+      
+      </div>
+    </div>
+
+  </section>
+  {% endif %}
+
+    <script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script>
+  </body>
+</html>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+ 
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>Calculate BMI</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Page top Section end -->
+
+  <!-- LOGIN Section -->
+
+  <!-- <section class="page-bottom-section set-bg" data-setbg="{% static 'img/login.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 m-auto text-white">
+          <h4>New to our website?</h4>
+          <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+          <a href="{% url 'signup' %}" class="site-btn sb-gradient" role="button" aria-pressed="true">Create an Account</a>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+       <!--  <div class="col-lg-6">
+          <div class="login_box_img">
+            <img class="img-fluid" src="{% static 'img/login.jpg' %}" alt="">
+            <div class="hover">
+              <h4>New to our website?</h4>
+              <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+              
+              <a href="{% url 'signup' %}" class="site-btn sb-gradient" role="button" aria-pressed="true">Create an Account</a>
+            </div>
+          </div>
+        </div> -->
+
+<center> 
+  <section class="page-bottom-section set-bg" data-setbg="{% static 'img/login.jpg' %}">
+    <div class="container">
+      <div class="row"> 
+        <div class="col-lg-6 m-auto text-white">
+          <div>
+              <br><br><br>
+              <form action="{% url 'calculate_bmi' %}" method="post" novalidate="novalidate">
+                {% csrf_token %}
+      <input type="int" name="height" id="height" placeholder="Height (in cm)">
+      <input type="int" name="weight" id="weight" placeholder="Weight (in kg)">
+      <input type="submit" value="Calculate">
+    </form>
+    <div id="results"></div>
+    {{final_bmi}}
+<!-- Include the AJAX script -->
+<!-- <script src="{% static 'js/bmi_ajax.js' %}"></script> -->
+
+          <br><br><br><br><br><br>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</center>
+  <!--================End Login Box Area =================-->
+  <!-- Trainers Section end -->
+
+  
+  </body>
+</html>
+{% endblock %}

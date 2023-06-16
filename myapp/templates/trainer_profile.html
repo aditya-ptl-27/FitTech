@@ -1,0 +1,75 @@
+{% extends 'trainer_header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>Trainer Profile</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+      <div class="row">
+        <center>
+        <div class="col-lg-8">
+          <h3>Edit Your Profile</h3>
+          {% if msg %}
+            <b style="color:blue;">{{msg}}</b>
+            {% endif %}
+            <br><br>
+          <form action="{% url 'trainer_profile' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            
+              
+              <div class="row">
+              <div class="col-md-6">
+                <input type="text" placeholder="First Name" name="fname" value="{{user.fname}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Last Name" name="lname" value="{{user.lname}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Email" name="email" value="{{user.email}}">
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Mobile" name="mobile" value="{{user.mobile}}">
+              </div>
+              <div class="col-md-6">
+                <img src="{{user.profile_pic.url}}" height="50px" width="50px">
+                <input type="file" placeholder="Profile Pic" name="profile_pic" value="{{user.profile_pic.url}}" required />
+              </div>
+              
+            
+            </div>
+            <center>
+              <button type="submit" value="submit" class="site-btn sb-gradient">Update Profile</button>
+            </center>
+          </form>
+        </div>
+        </center>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section end -->
+
+  
+  </body>
+</html>
+{% endblock %}
