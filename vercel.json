@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "version": 2,
     "builds": [
     {
@@ -39,3 +40,17 @@
 //         }
 //     ]
 // }
+=======
+    "builds": [{
+        "src": "mysite/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "mysite/wsgi.py"
+        }
+    ]
+}
+>>>>>>> 13f0982e0d70a6b60cac38026ec3199d7bd47bc1
