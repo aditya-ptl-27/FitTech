@@ -63,7 +63,7 @@
 							<img src="{{trainer.profile_pic.url}}" alt="">
 							<h4>{{trainer.fname}}</h4>
 							<h6>Gym Trainer</h6>
-							<p>Gym & Therapy Certificate of Uttarakhand University</p>
+							<p>Gym & Yoga Therapy Certificate of Uttarakhand University</p>
 							<div class="ai-social">
 								<a href="#"><i class="fa fa-facebook"></i></a>
 								<a href="#"><i class="fa fa-instagram"></i></a>
@@ -72,7 +72,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="sb-widget">
+				<!-- 	<div class="sb-widget">
 						<h2 class="sb-title">Categories</h2>
 						<ul class="sb-list">
 							<li><a href="#">Health<span>(5)</span></a></li>
@@ -82,7 +82,43 @@
 							<li><a href="#">Training<span>(12)</span></a></li>
 							<li><a href="#">Progress<span>(4)</span></a></li>
 						</ul>
+					</div> -->
+					<div class="sb-widget">
+						<h2 class="sb-title">Latest Workouts</h2>
+						<div class="latest-post-widget">
+							{% for i in latest_workouts %}
+							<a href="{% url 'workout_detail' pk=i.pk %}">
+							<div class="lp-item">
+								<div class="lp-thumb set-bg" data-setbg="{{i.w_gif.url}}"></div>
+								<div class="lp-text">
+									<h3>{{i.w_name}}</h3>
+									<p><i class="material-icons">event_available</i>June 28, 2019</p>
+								</div>
+							</div>
+							</a>
+							<br>
+							{% endfor %}
+							
+						</div>
 					</div>
+
+					<div class="sb-widget">
+						<h2 class="sb-title">Other Workouts</h2>
+						<div class="insta-widget">
+							{% for i in latest_workouts_02 %}
+							<div class="insta-item">
+								<a href="{% url 'workout_detail' pk=i.pk %}">
+								<div class="insta-img">
+									
+									<img height="80px" width="100px" src="{{i.w_gif.url}}" alt="">
+								</div>
+								</a>
+							</div>
+
+						{% endfor %}
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

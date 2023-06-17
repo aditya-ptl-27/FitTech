@@ -4,12 +4,12 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
-  <link rel="stylesheet" href="{% static 'css/image_text.css' %}">
+<!--   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/image_text.css' %}"> -->
 </head>
 <body>
                                                                                 
-  <!-- Page top Section -->
+  <!-- Page top Section --> 
   <center>
   <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
     <div class="container">
@@ -23,34 +23,6 @@
     </div>
   </section>
 </center>
-  
-  <!-- Page top Section end -->
-
-  <!-- LOGIN Section -->
-
-  <!-- <section class="page-bottom-section set-bg" data-setbg="{% static 'img/login.jpg' %}">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 m-auto text-white">
-          <h4>New to our website?</h4>
-          <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-          <a href="{% url 'signup' %}" class="site-btn sb-gradient" role="button" aria-pressed="true">Create an Account</a>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-       <!--  <div class="col-lg-6">
-          <div class="login_box_img">
-            <img class="img-fluid" src="{% static 'img/login.jpg' %}" alt="">
-            <div class="hover">
-              <h4>New to our website?</h4>
-              <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-              
-              <a href="{% url 'signup' %}" class="site-btn sb-gradient" role="button" aria-pressed="true">Create an Account</a>
-            </div>
-          </div>
-        </div> -->
 
 <center> 
   <section class="page-bottom-section set-bg">
@@ -60,7 +32,7 @@
           <div>
               <br><br><br>
 
-            <h1 style="color:#f65d5d">Log in to enter</h1>
+            <h3 style="color:#f65d5d">Log in to enter</h3>
           {% if msg %}
             <b style="color:blue;">{{msg}}</b>
           {% endif %}

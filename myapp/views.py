@@ -173,17 +173,10 @@ def update_password(request):
 		return render(request,'new_password.html',{'email':email,'msg':msg})
 
 def trainer_index(request):
-	# try:
-	# 	user=User.objects.get(email=request.session['email'])
-	# 	if user.usertype=='trainer':
-	# 		products=Product.objects.all()
-	# 		return render(request,'trainer_index.html',{'products':products})
-
-	# 	else:
-	# 		return render(request,'trainer_index.html')
-	# except:
-	# 	products=Product.objects.all()
-	return render(request,'trainer_index.html')
+	trainer=User.objects.get(email=request.session['email'])
+	workout=Workout.objects.filter(trainer=trainer)
+	trainers=User.objects.filter(usertype='trainer')
+	return render(request,'trainer_index.html',{'workout':workout,'trainers':trainers})
 
 def trainer_add_workout(request):
 	if request.method=='POST':
@@ -319,7 +312,8 @@ def calculate_bmi(request):
 
 
 def about(request):
-	return render(request,'about.html')
+	trainer=User.objects.filter(usertype='trainer')
+	return render(request,'about.html',{'trainer':trainer})
 
 def home_workouts(request):
 
@@ -363,10 +357,17 @@ def upper_body(request):
 def workout_detail(request,pk):
 	workout=Workout.objects.get(pk=pk)
 	trainer=workout.trainer
-	return render(request,'workout_detail.html',{'workout':workout,'trainer':trainer})
+	latest_workouts=Workout.objects.order_by("-id")[:3]
+	latest_workouts_02=Workout.objects.order_by("id")[:3]
+	context={'workout':workout,
+			'trainer':trainer,
+			'latest_workouts':latest_workouts,
+			'latest_workouts_02':latest_workouts_02}
+	return render(request,'workout_detail.html',context)
 
 def trainer(request):
-	return render(request,'trainer.html')
+	trainer=User.objects.filter(usertype='trainer')
+	return render(request,'trainer.html',{'trainer':trainer})
 
 
 def blog(request):

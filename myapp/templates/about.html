@@ -111,19 +111,20 @@
 		<div class="container">
 			<div class="section-title text-center">
 				<img src="{% static 'img/icons/logo-icon.png' %}" alt="">
-				<h2>Our Trainer Yoga</h2>
+				<h2>Our Trainers</h2>
 				<p>Practice Yoga to perfect physical beauty, take care of your soul and enjoy life more fully!</p>
 			</div>
 			<div class="trainer-slider owl-carousel">
+				{% for i in trainer %}
 				<div class="ts-item">
 					<div class="trainer-item">
 						<div class="ti-img">
-							<img src="{% static 'img/trainer/1.png' %}" alt="">
+							<img height="300px" src="{{i.profile_pic.url}}" alt="">
 						</div>
 						<div class="ti-text">
-							<h4>Lori Kennedy</h4>
-							<h6>Yoga Trainer</h6>
-							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
+							<h4>{{i.fname}}</h4>
+							<h6>Gym Trainer</h6>
+							<p>Gym & Yoga Therapy Certificate of Uttarakhand University Sanskrit</p>
 							<div class="ti-social">
 								<a href="#"><i class="fa fa-facebook"></i></a>
 								<a href="#"><i class="fa fa-instagram"></i></a>
@@ -133,42 +134,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="ts-item">
-					<div class="trainer-item">
-						<div class="ti-img">
-							<img src="{% static 'img/trainer/2.png' %}" alt="">
-						</div>
-						<div class="ti-text">
-							<h4>Lori Kennedy</h4>
-							<h6>Yoga Trainer</h6>
-							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
-							<div class="ti-social">
-								<a href="#"><i class="fa fa-facebook"></i></a>
-								<a href="#"><i class="fa fa-instagram"></i></a>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-								<a href="#"><i class="fa fa-linkedin"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="ts-item">
-					<div class="trainer-item">
-						<div class="ti-img">
-							<img src="{% static 'img/trainer/3.png' %}" alt="">
-						</div>
-						<div class="ti-text">
-							<h4>Lori Kennedy</h4>
-							<h6>Yoga Trainer</h6>
-							<p>Yoga & Therapy Certificate of Uttarakhand University Sanskrit</p>
-							<div class="ti-social">
-								<a href="#"><i class="fa fa-facebook"></i></a>
-								<a href="#"><i class="fa fa-instagram"></i></a>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-								<a href="#"><i class="fa fa-linkedin"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</section>
