@@ -280,36 +280,42 @@ def trainer_change_password(request):
 		return render(request,'trainer_change_password.html')
 
 def calculate_bmi(request):
-	if request.method == 'POST':
-		weight = float(request.POST.get('weight'))
-		height = float(request.POST.get('height'))
-		final_bmi=0
-		if weight <= 0 or height <= 0:
-			return HttpResponse('Please enter valid weight and height values.')
-		else:
-			return redirect('calculate_bmi')
-		bmi = weight / (height * height)
-		final_bmi=bmi*10000
-		context={'final_bmi':final_bmi}
-	return render(request,'calculate_bmi.html',context)
+    # if request.method == 'POST':
+    #     weight = float(request.POST.get('weight'))
+    #     height = float(request.POST.get('height'))
+    #     bmi = calculate_bmi_value(weight, height)
+    #     category = get_bmi_category(bmi)
+    #     context = {
+    #         'weight': weight,
+    #         'height': height,
+    #         'bmi': bmi,
+    #         'category': category,
+    #     }
+    #     return render(request, 'calculate_bmi.html', context)
+    
+    return render(request, 'calculate_bmi.html')
 
-# def calculate_bmi(request):
-# 	if request.method == 'POST':
-  
-#   		height =int(request.POST["height"])
-#   		weight =int(request.POST["weight"])
-  
-#   		bmi = weight / (height * height)
-  
-#   		context = {
-#     			"bmi": bmi,
-#   				}
-#   		return render(request, "result_bmi.html", context)
-# 	else:
-# 		return render(request,'calculate_bmi.html')
+# def calculate_bmi_value(weight, height):
+#     bmi = weight / ((height / 100) ** 2)
+#     return round(bmi, 2)
 
-# def calculate_bmi(request):
+# def get_bmi_category(bmi):
+#     if bmi < 18.5:
+#         return 'Underweight'
+#     elif 18.5 <= bmi < 25:
+#         return 'Normal weight'
+#     elif 25 <= bmi < 30:
+#         return 'Overweight'
+#     else:
+#         return 'Obese'
+def ideal_body_weight(request):
+	return render(request,'ideal_body_weight.html')
 
+def daily_calorie_intake(request):
+	return render(request,'daily_calorie_intake.html')
+
+def calories_burnt(request):
+	return render(request,'calories_burnt.html')
 
 def about(request):
 	trainer=User.objects.filter(usertype='trainer')

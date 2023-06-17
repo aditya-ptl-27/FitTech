@@ -36,4 +36,7 @@ urlpatterns = [
     path('trainer_change_password/',views.trainer_change_password,name='trainer_change_password'),
     path('calculate_bmi/',views.calculate_bmi, name='calculate_bmi'),
     path('workout_detail/<int:pk>/',views.workout_detail, name='workout_detail'),
+    path('ideal_body_weight/',views.ideal_body_weight, name='ideal_body_weight'),
+    path('daily_calorie_intake/',views.daily_calorie_intake, name='daily_calorie_intake'),
+    path('calories_burnt/',views.calories_burnt, name='calories_burnt'),
 ]
