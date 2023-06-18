@@ -322,8 +322,19 @@ def about(request):
 	return render(request,'about.html',{'trainer':trainer})
 
 def home_workouts(request):
-
 	return render(request,'home_workouts.html')
+
+def beginner_workouts(request):
+	workout=Workout.objects.filter(w_difficulty="Beginner")
+	return render(request,'beginner_workouts.html',{'workout':workout})
+
+def intermediate_workouts(request):
+	workout=Workout.objects.filter(w_difficulty="Intermediate")
+	return render(request,'intermediate_workouts.html',{'workout':workout})
+
+def advanced_workouts(request):
+	workout=Workout.objects.filter(w_difficulty="Advanced")
+	return render(request,'advanced_workouts.html',{'workout':workout})
 
 def trainer_home_workouts(request):
 	return render(request,'trainer_home_workouts.html')

@@ -20,11 +20,6 @@
 	<!-- Main Stylesheets -->
 	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 
-
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
 <style>
 
 img.profile {
@@ -35,11 +30,6 @@ img.profile {
 
 </head>
 <body>
-	<!-- Page Preloder -->
-	<!-- <div id="preloder">
-		<div class="loader"></div>
-	</div> -->
-
 
 	<!-- Header Section -->
 	<header class="header-section">
@@ -63,8 +53,10 @@ img.profile {
 					<li><a>Workouts</a>
 						<ul class="sub-menu">
 							<li><a href="{% url 'home_workouts' %}">Home Workouts</a></li>
+							<li><a href="{% url 'beginner_workouts' %}">Beginner Workouts</a></li>
+							<li><a href="{% url 'intermediate_workouts' %}">Intermediate Workouts</a></li>
+							<li><a href="{% url 'advanced_workouts' %}">Advanced Workouts</a></li>
 						</ul>
-						<!-- <li><a href="{% url 'calculate_bmi' %}">BMI</a></li> -->
 					</li>
 
 					<li><a>Calculator</a>
