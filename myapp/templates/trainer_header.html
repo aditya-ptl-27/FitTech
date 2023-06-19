@@ -77,18 +77,20 @@ img.profile {
 						{% endif %}
 						
 					</li>
-					<!-- <li><a>trainers</a>
-						<ul class="sub-menu">
-							<li><a href="{% url 'trainer' %}">Our Trainers</a></li>
-							
-						</ul>
-					</li> -->
-					<!-- <li><a>Blog</a>
-						<ul class="sub-menu">
-							<li><a href="{% url 'blog' %}">Our Blog</a></li>
-							<li><a href="{% url 'single_blog' %}">Blog Details</a></li>
-						</ul>
-					</li> -->
+					{% if request.session.email %}
+					<li><a>Blog</a>
+						
+								<ul class="sub-menu">
+									
+									<li><a href="{% url 'trainer_view_blogs' %}">My Blogs</a></li>
+									<li><a href="{% url 'trainer_add_blog' %}">Add New Blog</a></li>
+
+								</ul>
+						</li>
+						{% else %}
+								
+									<li><a href="{% url 'blog' %}">Our Blog</a></li>
+						{% endif %}
 					<li><a>Account</a>
 						{% if request.session.email %}
 						<ul class="sub-menu">

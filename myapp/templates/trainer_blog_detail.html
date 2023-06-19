@@ -1,10 +1,10 @@
-{% extends 'header.html' %}
+{% extends 'trainer_header.html' %}
 {% load static %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-
+<link rel="stylesheet" href="{% static 'css/delete_blog.css' %}"/>
 </head>
 <body>
 	
@@ -13,7 +13,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-7 m-auto text-white">
-					<h2>Workout Details</h2>
+					<h2>Blog Details</h2>
 				</div>
 			</div>
 		</div>
@@ -27,18 +27,14 @@
 				<div class="col-lg-9">
 					<div class="blog-details">
 						<div class="blog-preview">
-							<img height="400px" src="{{workout.w_gif.url}}" alt="">
+							<img height="500px" src="{{blog_obj.image.url}}" alt="">
 						</div>
-						<h2>{{workout.w_name}}</h2>
-						<!-- <div class="blog-meta"><p><i class="material-icons">alarm_on</i>120 Mins </p></div>
-						<div class="blog-meta"><p><i class="material-icons">people_outline</i>250 People Registered</p></div> -->
-						
-				        <h3 style="color:#f65d5d">{{workout.w_type}}</h3>
-				     	
-						<strong style="color:black;">Difficulty:</strong><p>{{workout.w_difficulty}}</p>
-						<strong style="color:black;">Muscles Targeted:</strong><p>{{workout.w_muscles_targeted}}</p>
-						<h3>Workout Details</h3>
-						<h5>{{workout.w_description}}</h5>
+						<h2>{{blog_obj.title}}</h2>
+						<div class="blog-meta"><p>{{blog_obj.created_at}}</p></div>
+					<div class="blog-preview">
+
+						{{blog_obj.content|safe}}
+					</div>
 						<br>
 						<div class="row">
 							<div class="col-sm-7">
@@ -60,8 +56,8 @@
 					<div class="sb-widget">
 						<h2 class="sb-title">About Trainer</h2>
 						<div class="about-instructor-widget">
-							<img src="{{trainer.profile_pic.url}}" alt="">
-							<h4>{{trainer.fname}}</h4>
+							<img src="{{user.profile_pic.url}}" alt="">
+							<h4>{{user.fname}} {{user.lname}}</h4>
 							<h6>Gym Trainer</h6>
 							<p>Gym & Yoga Therapy Certificate of Uttarakhand University</p>
 							<div class="ai-social">
@@ -74,39 +70,38 @@
 					</div>
 				
 					<div class="sb-widget">
-						<h2 class="sb-title">Latest Workouts</h2>
+						
 						<div class="latest-post-widget">
-							{% for i in latest_workouts %}
-							<a href="{% url 'workout_detail' pk=i.pk %}">
-							<div class="lp-item">
-								<div class="lp-thumb set-bg" data-setbg="{{i.w_gif.url}}"></div>
-								<div class="lp-text">
-									<h3>{{i.w_name}}</h3>
-									<p><i class="material-icons">event_available</i>June 28, 2019</p>
-								</div>
-							</div>
-							</a>
-							<br>
-							{% endfor %}
 							
-						</div>
-					</div>
-
-					<div class="sb-widget">
-						<h2 class="sb-title">Other Workouts</h2>
-						<div class="insta-widget">
-							{% for i in latest_workouts_02 %}
-							<div class="insta-item">
-								<a href="{% url 'workout_detail' pk=i.pk %}">
-								<div class="insta-img">
-									
-									<img height="80px" width="100px" src="{{i.w_gif.url}}" alt="">
-								</div>
-								</a>
+							
+							<div class="lp-item">
+								<a href="{%  url 'trainer_blog_edit' blog_obj.slug %}" class="site-btn sb-gradient">Edit Blog</a>
 							</div>
-
-						{% endfor %}
+							<br>
+							<div class="lp-item">
+								<a onclick="document.getElementById('id01').style.display='block'"style="color:red ;" class="site-btn sb-gradient">Delete Blog</a>
+								<div id="id01" class="modal">
+  <span onclick="document.getElementById('myForm').style.display='none'" class="close" title="Close Modal">×</span>
+  <form class="modal-content" action="/action_page.php">
+    <div class="container">
+      <h1>Delete Blog</h1>
+      <h5>Are you sure you want to delete your blog?</h5>
+    
+      <div class="clearfix">
+        	<button type="button" onclick="document.getElementById('id01').style.display='block'" class="cancelbtn">Cancel</button>
+    	<a href="{% url 'trainer_blog_delete' blog_obj.id %}">
+        	<button type="button" class="deletebtn">Delete</button>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
+							</div>
+							
+						
+							<br>	
 						</div>
+
 					</div>
 
 				</div>
@@ -114,7 +109,28 @@
 		</div>
 	</section>
 	<!-- Blog Details Section end -->
-	
+	<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+ 
+  
+}
+
+// function openForm() {
+//   document.getElementById("myForm").style.display = "block";
+// }
+
+// function closeForm() {
+//   document.getElementById("myForm").style.display = "none";
+// }
+</script>
 	
 
 	</body>

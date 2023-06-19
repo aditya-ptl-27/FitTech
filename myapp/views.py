@@ -1,71 +1,99 @@
 from django.shortcuts import render,redirect
-from .models import User,Workout,Bmi
+from .models import User,Workout
 from django.conf import settings
 from django.core.mail import send_mail
 import random
+from .form import *
 
 # Create your views here.
 def index(request):
-	workout=Workout.objects.all()
-	trainer=User.objects.filter(usertype='trainer')
-	return render(request,'index.html',{'workout':workout,'trainer':trainer})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.all()
+			blogs=BlogModel.objects.all()
+			trainer=User.objects.filter(usertype='trainer')
+			context={'workout':workout,'trainer':trainer,'blogs':blogs}
+			return render(request,'index.html',context)
+		else:
+			return redirect('trainer_index')
+	except:
+		workout=Workout.objects.all()
+		blogs=BlogModel.objects.all()
+		trainer=User.objects.filter(usertype='trainer')
+		context={'workout':workout,'trainer':trainer,'blogs':blogs}
+		return render(request,'index.html',context)
 
 def signup(request):
-	if request.method=='POST':
-		user=User()
-		user.fname=request.POST['fname']
-		user.lname=request.POST['lname']
-		user.email=request.POST['email']
-		user.mobile=request.POST['mobile']	
-		user.password=request.POST['password']
-		try:
-			User.objects.get(email=request.POST['email'])
-			msg='Email Already Registered'
-			return render(request,'signup.html',{"msg":msg,'user':user})
-		except:
-			if request.POST['password']==request.POST['cpassword']:
-				User.objects.create(
-							fname=request.POST['fname'],
-							lname=request.POST['lname'],
-							email=request.POST['email'],
-							mobile=request.POST['mobile'],
-							password=request.POST['password'],
-							profile_pic=request.FILES['profile_pic'],
-							usertype=request.POST['usertype']
-							)
-				msg='User SignUp Successful'
-				return render(request,'login.html',{'msg':msg})
-			else:
-				msg="Password & Confirm Password Does Not Match"
-				return render(request,'signup.html',{'msg':msg,'user':user})
-	else:
-		return render(request,'signup.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return redirect('index')
+		else:
+			return redirect('trainer_index')
+	except:	
+		if request.method=='POST':
+			user=User()
+			user.fname=request.POST['fname']
+			user.lname=request.POST['lname']
+			user.email=request.POST['email']
+			user.mobile=request.POST['mobile']	
+			user.password=request.POST['password']
+			try:
+				User.objects.get(email=request.POST['email'])
+				msg='Email Already Registered'
+				return render(request,'signup.html',{"msg":msg,'user':user})
+			except:
+				if request.POST['password']==request.POST['cpassword']:
+					User.objects.create(
+								fname=request.POST['fname'],
+								lname=request.POST['lname'],
+								email=request.POST['email'],
+								mobile=request.POST['mobile'],
+								password=request.POST['password'],
+								profile_pic=request.FILES['profile_pic'],
+								usertype=request.POST['usertype']
+								)
+					msg='User SignUp Successful'
+					return render(request,'login.html',{'msg':msg})
+				else:
+					msg="Password & Confirm Password Does Not Match"
+					return render(request,'signup.html',{'msg':msg,'user':user})
+		else:
+			return render(request,'signup.html')
 
 
 def login(request):
-	if request.method=='POST':
-		try:
-			user=User.objects.get(email=request.POST['email'])
-			if user.password==request.POST['password']:
-				if user.usertype=='user':
-					request.session['email']=user.email
-					request.session['fname']=user.fname
-					request.session['profile_pic']=user.profile_pic.url
-					return redirect('index')
-				elif user.usertype=='trainer':
-					request.session['email']=user.email
-					request.session['fname']=user.fname
-					request.session['profile_pic']=user.profile_pic.url
-					return redirect('trainer_index')
-			else:
-				msg='Password Is Incorrect'
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return redirect('index')
+		else:
+			return redirect('trainer_index')
+	except:
+		if request.method=='POST':
+			try:
+				user=User.objects.get(email=request.POST['email'])
+				if user.password==request.POST['password']:
+					if user.usertype=='user':
+						request.session['email']=user.email
+						request.session['fname']=user.fname
+						request.session['profile_pic']=user.profile_pic.url
+						return redirect('index')
+					elif user.usertype=='trainer':
+						request.session['email']=user.email
+						request.session['fname']=user.fname
+						request.session['profile_pic']=user.profile_pic.url
+						return redirect('trainer_index')
+				else:
+					msg='Password Is Incorrect'
+					return render(request,'login.html',{'msg':msg})
+			except:
+				msg='Email Does Not Exist'
 				return render(request,'login.html',{'msg':msg})
-		except:
-			msg='Email Does Not Exist'
-			return render(request,'login.html',{'msg':msg})
 
-	else:
-		return render(request,'login.html')
+		else:
+			return render(request,'login.html')
 
 def logout(request):
 	try:
@@ -78,326 +106,635 @@ def logout(request):
 		return render(request,'login.html')
 
 def change_password(request):
-	if request.method=='POST':
-		user=User.objects.get(email=request.session['email'])
-		if user.password==request.POST['old_password']:
-			if request.POST['new_password']==user.password:
-				msg='You Cannot Use Your Old Password'
-				return render(request,'change_password.html',{'msg':msg})
-			else:
-
-				if request.POST['new_password']==request.POST['cnew_password']:
-					user.password=request.POST['new_password']
-					user.save()
-					del request.session['email']
-					del request.session['fname']
-					del request.session['profile_pic']
-					msg='Password Changed Successfully'
-					return render(request,'login.html',{'msg':msg})
-				else:
-					msg='New Password And Confirm New Password Does Not Match'
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='user':
+		if request.method=='POST':
+			if user.password==request.POST['old_password']:
+				if request.POST['new_password']==user.password:
+					msg='You Cannot Use Your Old Password'
 					return render(request,'change_password.html',{'msg':msg})
-		else:
-			msg='Old Password Is Incorrect'
-			return render(request,'change_password.html',{'msg':msg})
+				else:
 
+					if request.POST['new_password']==request.POST['cnew_password']:
+						user.password=request.POST['new_password']
+						user.save()
+						del request.session['email']
+						del request.session['fname']
+						del request.session['profile_pic']
+						msg='Password Changed Successfully'
+						return render(request,'login.html',{'msg':msg})
+					else:
+						msg='New Password And Confirm New Password Does Not Match'
+						return render(request,'change_password.html',{'msg':msg})
+			else:
+				msg='Old Password Is Incorrect'
+				return render(request,'change_password.html',{'msg':msg})
+
+		else:
+			return render(request,'change_password.html')
 	else:
-		return render(request,'change_password.html')
+		return redirect('trainer_change_password')
 
 def profile(request):
 	user=User.objects.get(email=request.session['email'])
-	if request.method=='POST':
-		user.fname=request.POST['fname']
-		user.lname=request.POST['lname']
-		user.mobile=request.POST['mobile']
+	if user.usertype=='user':
+		if request.method=='POST':
+			user.fname=request.POST['fname']
+			user.lname=request.POST['lname']
+			user.mobile=request.POST['mobile']
 		
-		try:
-			user.profile_pic=request.FILES['profile_pic']
-		except:
-			pass
-		user.save()
-		msg='Profile Updated Successfully'
-		request.session['profile_pic']=user.profile_pic.url
-		request.session['fname']=user.fname
-		return render(request,'profile.html',{'msg':msg,'user':user})
+			try:
+				user.profile_pic=request.FILES['profile_pic']
+			except:
+				pass
+			user.save()
+			msg='Profile Updated Successfully'
+			request.session['profile_pic']=user.profile_pic.url
+			request.session['fname']=user.fname
+			return render(request,'profile.html',{'msg':msg,'user':user})
+		else:
+			return render(request,'profile.html',{'user':user})
 	else:
-		return render(request,'profile.html',{'user':user})
+		return redirect('trainer_profile')
 
 def forgot_password(request):
-	if request.method=='POST':
-		try:
-			user=User.objects.get(email=request.POST['email'])
-			otp=random.randint(1000,9999)
-			subject = 'OTP For Forgot Password'
-			message ='Hi '+ user.fname+ ', Your OTP For Forgot Password Is '+ str(otp)
-			email_from = settings.EMAIL_HOST_USER
-			recipient_list = [user.email, ]
-			send_mail( subject, message, email_from, recipient_list )
-			msg='OTP Sent Successfully'
-			return render(request,'otp.html',{'otp':otp,'email':user.email,'msg':msg})
-		except:
-			msg='Email Not Registered'
-			return render(request,'forgot_password.html',{'msg':msg}) 
-	else:
-		return render(request,'forgot_password.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return redirect('change_password')
+		else:
+			return redirect('trainer_change_password')
+	except:
+		if request.method=='POST':
+			try:
+				user=User.objects.get(email=request.POST['email'])
+				otp=random.randint(1000,9999)
+				subject = 'OTP For Forgot Password'
+				message ='Hi '+ user.fname+ ', Your OTP For Forgot Password Is '+ str(otp)
+				email_from = settings.EMAIL_HOST_USER
+				recipient_list = [user.email, ]
+				send_mail( subject, message, email_from, recipient_list )
+				msg='OTP Sent Successfully'
+				return render(request,'otp.html',{'otp':otp,'email':user.email,'msg':msg})
+			except:
+				msg='Email Not Registered'
+				return render(request,'forgot_password.html',{'msg':msg}) 
+		else:
+			return render(request,'forgot_password.html')
 
 
 def verify_otp(request):
-	email=request.POST['email']
-	otp=request.POST['otp']
-	uotp=request.POST['uotp']
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return redirect('index')
+		else:
+			return redirect('trainer_index')
+	except:
+		email=request.POST['email']
+		otp=request.POST['otp']
+		uotp=request.POST['uotp']
 
-	if otp==uotp:
-		return render(request,'new_password.html',{'email':email})
-	else:
-		msg='OTP Does Not Match'
-		return render(request,'otp.html',{'email':email,'otp':otp,'msg':msg})
+		if otp==uotp:
+			return render(request,'new_password.html',{'email':email})
+		else:
+			msg='OTP Does Not Match'
+			return render(request,'otp.html',{'email':email,'otp':otp,'msg':msg})
 
 def update_password(request):
-	email=request.POST['email']
-	np=request.POST['new_password']
-	cnp=request.POST['cnew_password']
-	if np==cnp:
-		user=User.objects.get(email=email)
-		if user.password==np:
-			msg='You Cannot Use Your Old Password'
-			return render(request,'new_password.html',{'email':email,'msg':msg})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return redirect('index')
 		else:
-			user.password=np
-			user.save()
-			# return redirect('logout')
-			msg='Password Updated Successfully'
-			return render(request,'login.html',{'msg':msg})
-	else:
-		msg='New Password & Confirm New Password Does Not Match'
-		return render(request,'new_password.html',{'email':email,'msg':msg})
+			return redirect('trainer_index')
+	except:
+		email=request.POST['email']
+		np=request.POST['new_password']
+		cnp=request.POST['cnew_password']
+		if np==cnp:
+			user=User.objects.get(email=email)
+			if user.password==np:
+				msg='You Cannot Use Your Old Password'
+				return render(request,'new_password.html',{'email':email,'msg':msg})
+			else:
+				user.password=np
+				user.save()
+				msg='Password Updated Successfully'
+				return render(request,'login.html',{'msg':msg})
+		else:
+			msg='New Password & Confirm New Password Does Not Match'
+			return render(request,'new_password.html',{'email':email,'msg':msg})
 
 def trainer_index(request):
 	trainer=User.objects.get(email=request.session['email'])
-	workout=Workout.objects.filter(trainer=trainer)
-	trainers=User.objects.filter(usertype='trainer')
-	return render(request,'trainer_index.html',{'workout':workout,'trainers':trainers})
+	user=User.objects.get(email=request.session['email'])
+	if trainer.usertype=='trainer':
+		blogs=BlogModel.objects.filter(user=user)
+		workout=Workout.objects.filter(trainer=trainer)
+		trainers=User.objects.filter(usertype='trainer')
+		context={'workout':workout,'trainers':trainers,'blogs':blogs}
+		return render(request,'trainer_index.html',context)
+	else:
+		return redirect('index')
 
 def trainer_add_workout(request):
-	if request.method=='POST':
-		trainer=User.objects.get(email=request.session['email'])
-		Workout.objects.create(
-				trainer=trainer,
-				w_type=request.POST['w_type'],
-				w_name=request.POST['w_name'],
-				w_description=request.POST['w_description'],
-				w_difficulty=request.POST['w_difficulty'],
-				w_gif=request.FILES['w_gif'],
-				w_muscles_targeted=request.POST['w_muscles_targeted']
-			)	
-		msg='Workout Added Successfully'
-		return render(request,'trainer_add_workout.html',{'msg':msg})
+	trainer=User.objects.get(email=request.session['email'])
+	if trainer.usertype=='trainer':
+		if request.method=='POST':
+			Workout.objects.create(
+					trainer=trainer,
+					w_type=request.POST['w_type'],
+					w_name=request.POST['w_name'],
+					w_description=request.POST['w_description'],
+					w_difficulty=request.POST['w_difficulty'],
+					w_gif=request.FILES['w_gif'],
+					w_muscles_targeted=request.POST['w_muscles_targeted']
+				)	
+			msg='Workout Added Successfully'
+			return render(request,'trainer_add_workout.html',{'msg':msg})
 
+		else:
+			return render(request,'trainer_add_workout.html')
 	else:
-		return render(request,'trainer_add_workout.html')
-	# return render(request,'trainer_add_workout.html')
+		return redirect('index')
+
 
 def trainer_view_workouts(request):
 	trainer=User.objects.get(email=request.session['email'])
-	workouts=Workout.objects.filter(trainer=trainer)
-	return render(request,'trainer_view_workouts.html',{'workouts':workouts})
+	if trainer.usertype=='trainer':
+		workouts=Workout.objects.filter(trainer=trainer)
+		return render(request,'trainer_view_workouts.html',{'workouts':workouts})
+	else:
+		return redirect('home_workouts')
 
 def trainer_workout_detail(request,pk):
 	user=User.objects.get(email=request.session['email'])
-	workout=Workout.objects.get(pk=pk)
-	return render(request,'trainer_workout_detail.html',{'workout':workout,'user':user})
+	if user.usertype=='trainer':
+		workout=Workout.objects.get(pk=pk)
+		return render(request,'trainer_workout_detail.html',{'workout':workout,'user':user})
+	else:
+		return redirect('home_workouts')
 
 def trainer_workout_edit(request,pk):
-	workout=Workout.objects.get(pk=pk)
-	if request.method=='POST':
-		workout.w_type=request.POST['w_type']
-		workout.w_name=request.POST['w_name']
-		workout.w_description=request.POST['w_description']
-		workout.w_difficulty=request.POST['w_difficulty']
-		workout.w_muscles_targeted=request.POST['w_muscles_targeted']
-		try:
-			workout.w_gif=request.FILES['w_gif']
-		except:
-			pass
-		workout.save()
-		msg="Workout Updated Successfully"
-		return render(request,'trainer_workout_edit.html',{'workout':workout,'msg':msg})
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		workout=Workout.objects.get(pk=pk)
+		if request.method=='POST':
+			workout.w_type=request.POST['w_type']
+			workout.w_name=request.POST['w_name']
+			workout.w_description=request.POST['w_description']
+			workout.w_difficulty=request.POST['w_difficulty']
+			workout.w_muscles_targeted=request.POST['w_muscles_targeted']
+			try:
+				workout.w_gif=request.FILES['w_gif']
+			except:
+				pass
+			workout.save()
+			msg="Workout Updated Successfully"
+			return render(request,'trainer_workout_edit.html',{'workout':workout,'msg':msg})
 
+		else:
+			return render(request,'trainer_workout_edit.html',{'workout':workout})
 	else:
-		return render(request,'trainer_workout_edit.html',{'workout':workout})
+		return redirect('index')
 
 def trainer_workout_delete(request,pk):
-	workout=Workout.objects.get(pk=pk)
-	workout.delete()
-	msg='Product Deleted Successfully'
-	return redirect('trainer_view_workouts')
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		workout=Workout.objects.get(pk=pk)
+		workout.delete()
+		msg='Product Deleted Successfully'
+		return redirect('trainer_view_workouts')
+	else:
+		return redirect('index')
 
 
 def trainer_profile(request):
 	user=User.objects.get(email=request.session['email'])
-	if request.method=='POST':
-		user.fname=request.POST['fname']
-		user.lname=request.POST['lname']
-		user.mobile=request.POST['mobile']
+	if user.usertype=='trainer':
+		if request.method=='POST':
+			user.fname=request.POST['fname']
+			user.lname=request.POST['lname']
+			user.mobile=request.POST['mobile']
 		
-		try:
-			user.profile_pic=request.FILES['profile_pic']
-		except:
-			pass
-		user.save()
-		msg='Profile Updated Successfully'
-		request.session['profile_pic']=user.profile_pic.url
-		request.session['fname']=user.fname
-		return render(request,'trainer_profile.html',{'msg':msg,'user':user})
+			try:
+				user.profile_pic=request.FILES['profile_pic']
+			except:
+				pass
+			user.save()
+			msg='Profile Updated Successfully'
+			request.session['profile_pic']=user.profile_pic.url
+			request.session['fname']=user.fname
+			return render(request,'trainer_profile.html',{'msg':msg,'user':user})
+		else:
+			return render(request,'trainer_profile.html',{'user':user})
 	else:
-		return render(request,'trainer_profile.html',{'user':user})
+		return redirect('profile')
 
 def trainer_change_password(request):
-	if request.method=='POST':
-		user=User.objects.get(email=request.session['email'])
-		if user.password==request.POST['old_password']:
-			if request.POST['new_password']==user.password:
-				msg='You Cannot Use Your Old Password'
-				return render(request,'trainer_change_password.html',{'msg':msg})
-			else:
-
-				if request.POST['new_password']==request.POST['cnew_password']:
-					user.password=request.POST['new_password']
-					user.save()
-					del request.session['email']
-					del request.session['fname']
-					del request.session['profile_pic']
-					msg='Password Changed Successfully'
-					return render(request,'login.html',{'msg':msg})
-				else:
-					msg='New Password And Confirm New Password Does Not Match'
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		if request.method=='POST':
+			if user.password==request.POST['old_password']:
+				if request.POST['new_password']==user.password:
+					msg='You Cannot Use Your Old Password'
 					return render(request,'trainer_change_password.html',{'msg':msg})
-		else:
-			msg='Old Password Is Incorrect'
-			return render(request,'trainer_change_password.html',{'msg':msg})
+				else:
 
+					if request.POST['new_password']==request.POST['cnew_password']:
+						user.password=request.POST['new_password']
+						user.save()
+						del request.session['email']
+						del request.session['fname']
+						del request.session['profile_pic']
+						msg='Password Changed Successfully'
+						return render(request,'login.html',{'msg':msg})
+					else:
+						msg='New Password And Confirm New Password Does Not Match'
+						return render(request,'trainer_change_password.html',{'msg':msg})
+			else:
+				msg='Old Password Is Incorrect'
+				return render(request,'trainer_change_password.html',{'msg':msg})
+
+
+		else:
+			return render(request,'trainer_change_password.html')
 	else:
-		return render(request,'trainer_change_password.html')
+		return redirect('change_password')
 
 def calculate_bmi(request):
-    # if request.method == 'POST':
-    #     weight = float(request.POST.get('weight'))
-    #     height = float(request.POST.get('height'))
-    #     bmi = calculate_bmi_value(weight, height)
-    #     category = get_bmi_category(bmi)
-    #     context = {
-    #         'weight': weight,
-    #         'height': height,
-    #         'bmi': bmi,
-    #         'category': category,
-    #     }
-    #     return render(request, 'calculate_bmi.html', context)
-    
-    return render(request, 'calculate_bmi.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request, 'calculate_bmi.html')
+		else:
+			return redirect('trainer_index')
+	except:
+		return render(request, 'calculate_bmi.html')
 
-# def calculate_bmi_value(weight, height):
-#     bmi = weight / ((height / 100) ** 2)
-#     return round(bmi, 2)
-
-# def get_bmi_category(bmi):
-#     if bmi < 18.5:
-#         return 'Underweight'
-#     elif 18.5 <= bmi < 25:
-#         return 'Normal weight'
-#     elif 25 <= bmi < 30:
-#         return 'Overweight'
-#     else:
-#         return 'Obese'
 def ideal_body_weight(request):
-	return render(request,'ideal_body_weight.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'ideal_body_weight.html')
+		else:
+			return redirect('trainer_index')
+	except:
+		return render(request,'ideal_body_weight.html')
 
 def daily_calorie_intake(request):
-	return render(request,'daily_calorie_intake.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'daily_calorie_intake.html')
+		else:
+			return redirect('trainer_index')
+	except:
+		return render(request,'daily_calorie_intake.html')
 
 def calories_burnt(request):
-	return render(request,'calories_burnt.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'calories_burnt.html')
+		else:
+			return redirect('trainer_index')
+	except:
+		return render(request,'calories_burnt.html')
 
 def about(request):
-	trainer=User.objects.filter(usertype='trainer')
-	return render(request,'about.html',{'trainer':trainer})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			trainer=User.objects.filter(usertype='trainer')
+			return render(request,'about.html',{'trainer':trainer})
+		else:
+			return redirect('trainer_index')
+	except:
+		trainer=User.objects.filter(usertype='trainer')
+		return render(request,'about.html',{'trainer':trainer})
 
 def home_workouts(request):
-	return render(request,'home_workouts.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'home_workouts.html')
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		return render(request,'home_workouts.html')
 
 def beginner_workouts(request):
-	workout=Workout.objects.filter(w_difficulty="Beginner")
-	return render(request,'beginner_workouts.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_difficulty="Beginner")
+			return render(request,'beginner_workouts.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_difficulty="Beginner")
+		return render(request,'beginner_workouts.html',{'workout':workout})
 
 def intermediate_workouts(request):
-	workout=Workout.objects.filter(w_difficulty="Intermediate")
-	return render(request,'intermediate_workouts.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_difficulty="Intermediate")
+			return render(request,'intermediate_workouts.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_difficulty="Intermediate")
+		return render(request,'intermediate_workouts.html',{'workout':workout})
 
 def advanced_workouts(request):
-	workout=Workout.objects.filter(w_difficulty="Advanced")
-	return render(request,'advanced_workouts.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_difficulty="Advanced")
+			return render(request,'advanced_workouts.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_difficulty="Advanced")
+		return render(request,'advanced_workouts.html',{'workout':workout})
 
 def trainer_home_workouts(request):
-	return render(request,'trainer_home_workouts.html')
-
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'home_workouts.html')
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		return render(request,'trainer_home_workouts.html')
+	
 def full_body(request):
-	workout=Workout.objects.filter(w_type='Full Body')
-	return render(request,'full_body.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Full Body')
+			return render(request,'full_body.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Full Body')
+		return render(request,'full_body.html',{'workout':workout})
 
 def lower_body(request):
-	workout=Workout.objects.filter(w_type='Lower Body')
-	return render(request,'lower_body.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Lower Body')
+			return render(request,'lower_body.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Lower Body')
+		return render(request,'lower_body.html',{'workout':workout})
 
 def weight_loss(request):
-	workout=Workout.objects.filter(w_type='Weight Loss')
-	return render(request,'weight_loss.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Weight Loss')
+			return render(request,'weight_loss.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Weight Loss')
+		return render(request,'weight_loss.html',{'workout':workout})
 
 def get_fit(request):
-	workout=Workout.objects.filter(w_type='Get Fit')
-	return render(request,'get_fit.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Get Fit')
+			return render(request,'get_fit.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Get Fit')
+		return render(request,'get_fit.html',{'workout':workout})
 
 def build_muscle(request):
-	workout=Workout.objects.filter(w_type='Build Muscle')
-	return render(request,'build_muscle.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Build Muscle')
+			return render(request,'build_muscle.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Build Muscle')
+		return render(request,'build_muscle.html',{'workout':workout})
 
 def gain_strength(request):
-	workout=Workout.objects.filter(w_type='Gain Strength')
-	return render(request,'gain_strength.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Gain Strength')
+			return render(request,'gain_strength.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Gain Strength')
+		return render(request,'gain_strength.html',{'workout':workout})
 
 
 def upper_body(request):
-	workout=Workout.objects.filter(w_type='Upper Body')
-	return render(request,'upper_body.html',{'workout':workout})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.filter(w_type='Upper Body')
+			return render(request,'upper_body.html',{'workout':workout})
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		workout=Workout.objects.filter(w_type='Upper Body')
+		return render(request,'upper_body.html',{'workout':workout})
 
-# def classes_details(request):
-# 	return render(request,'classes-details.html')
 
 def workout_detail(request,pk):
-	workout=Workout.objects.get(pk=pk)
-	trainer=workout.trainer
-	latest_workouts=Workout.objects.order_by("-id")[:3]
-	latest_workouts_02=Workout.objects.order_by("id")[:3]
-	context={'workout':workout,
-			'trainer':trainer,
-			'latest_workouts':latest_workouts,
-			'latest_workouts_02':latest_workouts_02}
-	return render(request,'workout_detail.html',context)
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			workout=Workout.objects.get(pk=pk)
+			trainer=workout.trainer
+			latest_workouts=Workout.objects.order_by("-id")[:3]
+			latest_workouts_02=Workout.objects.order_by("id")[:3]
+			context={'workout':workout,
+					'trainer':trainer,
+					'latest_workouts':latest_workouts,
+					'latest_workouts_02':latest_workouts_02}
+			return render(request,'workout_detail.html',context)
+
+		else:
+			return redirect('trainer_view_workouts')
+	except:
+		return redirect('login')
 
 def trainer(request):
-	trainer=User.objects.filter(usertype='trainer')
-	return render(request,'trainer.html',{'trainer':trainer})
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			trainer=User.objects.filter(usertype='trainer')
+			return render(request,'trainer.html',{'trainer':trainer})
+		else:
+			return redirect('trainer_index')
+	except:
+		trainer=User.objects.filter(usertype='trainer')
+		return render(request,'trainer.html',{'trainer':trainer})
 
-
-def blog(request):
-	return render(request,'blog.html')
-
-def single_blog(request):
-	return render(request,'single-blog.html')
-
-def events(request):
-	return render(request,'events.html')
-
-def event_details(request):
-	return render(request,'event-details.html')
 
 def contact(request):
-	return render(request,'contact.html')
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			return render(request,'contact.html')
+		else:
+			return redirect('trainer_index')
+	except:
+		return render(request,'contact.html')
+
+def blog(request):
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			blogs=BlogModel.objects.all()
+			return render(request, 'blog.html',{'blogs':blogs,'trainer':trainer})
+		else:
+			return redirect('trainer_view_blogs')
+	except:
+		blogs=BlogModel.objects.all()
+		return render(request, 'blog.html',{'blogs':blogs,'trainer':trainer})
+
+def blog_detail(request, slug):
+	try:
+		user=User.objects.get(email=request.session['email'])
+		if user.usertype=='user':
+			blog=BlogModel.objects.get(slug=slug)
+			trainer=blog.user
+			latest_blogs=BlogModel.objects.order_by("-id")[:3]
+			latest_blogs_02=BlogModel.objects.order_by("id")[:3]
+			print(trainer)
+			context = {'trainer':trainer,'latest_blogs':latest_blogs,
+					'latest_blogs_02':latest_blogs_02}
+			try:
+				blog_obj = BlogModel.objects.filter(slug=slug).first()
+				context['blog_obj'] = blog_obj
+			except Exception as e:
+				print(e)
+			return render(request, 'blog_detail.html', context)
+		else:
+			return redirect('trainer_view_blogs')
+	except:
+		blog=BlogModel.objects.get(slug=slug)
+		trainer=blog.user
+		latest_blogs=BlogModel.objects.order_by("-id")[:3]
+		latest_blogs_02=BlogModel.objects.order_by("id")[:3]
+		print(trainer)
+		context = {'trainer':trainer,'latest_blogs':latest_blogs,
+				'latest_blogs_02':latest_blogs_02}
+		try:
+			blog_obj = BlogModel.objects.filter(slug=slug).first()
+			context['blog_obj'] = blog_obj
+		except Exception as e:
+			print(e)
+		return render(request, 'blog_detail.html', context)
+
+def trainer_add_blog(request):
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		context = {'form': BlogForm}
+		context1={'form':BlogForm}
+		try:
+			if request.method == 'POST':
+				form = BlogForm(request.POST)
+				print(request.FILES)
+				image = request.FILES.get('image', '')
+				title = request.POST.get('title')
+				user=User.objects.get(email=request.session['email'])
+			
+				if form.is_valid():
+					print('Valid')
+					content = form.cleaned_data['content']
+
+				blog_obj = BlogModel.objects.create(
+					user=user, title=title,
+					content=content, image=image
+					)
+				print(blog_obj)
+				msg="Blog Added Successfully"
+				context['msg']=msg
+				return render(request,'trainer_add_blog.html',context)
+		except Exception as e:
+			print(e)
+
+		return render(request, 'trainer_add_blog.html', context1)
+	else:
+		return redirect('index')
+
+def trainer_view_blogs(request):
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		blogs=BlogModel.objects.filter(user=user)
+		return render(request, 'trainer_view_blogs.html',{'blogs':blogs,'user':user})
+	else:
+		return redirect('blog')
+
+def trainer_blog_detail(request, slug):
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		trainer=BlogModel.objects.get(slug=slug)
+		print(trainer)
+		context = {'user':user}
+		try:
+			blog_obj = BlogModel.objects.filter(slug=slug).first()
+			context['blog_obj'] = blog_obj
+		except Exception as e:
+			print(e)
+		return render(request, 'trainer_blog_detail.html', context)
+	else:
+		return redirect('blog')
+
+def trainer_blog_edit(request,slug):
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		blog_obj=BlogModel.objects.get(slug=slug)
+		initial_dict = {'content': blog_obj.content}
+		form = BlogForm(initial=initial_dict)
+		if request.method=='POST':
+			form = BlogForm(request.POST)
+			blog_obj.title=request.POST['title']
+			blog_obj.content=request.POST['content']
+			
+			try:
+				blog_obj.image=request.FILES['image']
+			except:
+				pass
+			blog_obj.save()
+			msg="Blog Updated Successfully"
+			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'msg':msg,'form':form})
+
+		else:
+			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'form':form})
+	else:
+		return redirect('index')
+
+def trainer_blog_delete(request, id):
+	user=User.objects.get(email=request.session['email'])
+	if user.usertype=='trainer':
+		try:
+			blog_obj = BlogModel.objects.get(id=id)
+			blog_obj.delete()
+			return redirect('trainer_view_blogs')
+
+		except Exception as e:
+			print(e)
+
+			return redirect('trainer_view_blogs')
+	else:
+		return redirect('index')

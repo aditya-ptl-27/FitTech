@@ -1,0 +1,67 @@
+{% extends 'trainer_header.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  
+</head>
+<body>
+                                                                                
+  <!-- Page top Section -->
+  <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 m-auto text-white">
+          <h2>Edit Your Blog</h2>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Page top Section end -->
+
+  <!-- Contact Section -->
+  <section class="contact-page-section spad overflow-hidden">
+    <div class="container">
+      <div class="row">
+        <center>
+
+        <div class="col-lg-14">
+          {% if msg %}
+            <b style="color:blue;">{{msg}}</b>
+            {% endif %}
+            <br><br>
+     
+          <form action="{% url 'trainer_blog_edit' slug=blog_obj.slug %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            
+              <div class="form-group">
+                <label>Enter blog title</label>
+                <input type="text" class="form-control" value="{{blog_obj.title}}" placeholder="Enter title" name="title">
+
+                {{form.media}}
+                {{form.as_p}}
+              </div>
+              <div class="col-md-12">
+                <img style="border-radius: 20px" src="{{blog_obj.image.url}}" width="200px" height="200px">
+                <input type="file" name="image" class="form-control" >
+            </div>
+              
+            <center>
+              <button type="submit" value="submit" class="site-btn sb-gradient">Update Blog</button>
+            </center>
+          </form>
+        </div>
+        </center>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section end -->
+
+
+  </body>
+</html>
+{% endblock %}

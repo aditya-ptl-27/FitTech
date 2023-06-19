@@ -143,10 +143,9 @@
 		<div class="container">
 			<div class="section-title text-center">
 				<img src="{% static 'img/fit_logo1.png' %}" height="100px" width="100px" alt="">
-				<h2>Popular Workouts</h2>
+				<h2>My Workouts</h2>
 				<p>Exercise regularly to get perfect physical beauty, take care of your soul and enjoy life more fully!</p>
 			</div>
-			{% if request.session.email %}
 			<div class="classes-slider owl-carousel">
 				{% for i in workout %}
 				<div class="classes-item">
@@ -167,74 +166,55 @@
 					<center>
 					<div class="ci-bottom">
 						<div class="ci-author">
-							<!-- <img src="{% static 'img/classes/author/1.jpg' %}" alt="">
-							<div class="author-text">
-								<h6>Victoria Webb</h6>
-								<p>Yoga Trainer</p>
-							</div> -->
+							
 						</div>
 						<a href="{% url 'trainer_workout_detail' pk=i.pk %}" class="site-btn sb-gradient">Details</a>
 					</div>
 				</center>
 				</div>
 				{% endfor %}
-				</div>
+		</div>
+	</section>
+	<!-- Classes Section end -->
 
-			{% else %}
-<div class="classes-slider owl-carousel">
-				{% for i in workout %}
+	<!-- Classes Section -->
+	<section class="classes-section spad">
+		<div class="container">
+			<div class="section-title text-center">
+				<img src="{% static 'img/fit_logo1.png' %}" height="100px" width="100px" alt="">
+				<h2>My Blogs</h2>
+				<p>Exercise regularly to get perfect physical beauty, take care of your soul and enjoy life more fully!</p>
+			</div>
+			<div class="classes-slider owl-carousel">
+				{% for i in blogs %}
 				<div class="classes-item">
 					<div class="ci-img">
-						<a onclick="openForm()">
-						<img src="{{i.w_gif.url}}" alt="">
+						<a href="{% url 'trainer_blog_detail' slug=i.slug %}">
+						<img src="{{i.image.url}}" alt="">
 						</a>
 					</div>
 					<div class="ci-text">
-						<h4><a onclick="openForm()">{{i.w_name}}</a></h4>
+						<h4><a href="{% url 'trainer_blog_detail' slug=i.slug %}">{{i.title}}</a></h4>
 						<div class="ci-metas">
-							<div><h6 style="color:#f65d5d">{{i.w_type}}</h6></div>
-							
+							<div><h6 style="color:#f65d5d">{{i.trainer}}</h6></div>
 						</div>
-						<li><strong style="color:black;">Difficulty:</strong><p>{{i.w_difficulty}}</p></li>
-						<li><strong style="color:black;">Muscles Targeted:</strong><p>{{i.w_muscles_targeted}}</p></li>
+						<p style="color:#f65d5d">{{i.created_at}}</p>
+						
 					</div>
 					<center>
 					<div class="ci-bottom">
 						<div class="ci-author">
-							<!-- <img src="{% static 'img/classes/author/1.jpg' %}" alt="">
-							<div class="author-text">
-								<h6>Victoria Webb</h6>
-								<p>Yoga Trainer</p>
-							</div> -->
+						
 						</div>
-						<a onclick="openForm()" class="site-btn sb-gradient">Details</a>
+						<a href="{% url 'blog_detail' slug=i.slug %}" class="site-btn sb-gradient">See More</a>
 					</div>
 				</center>
 				</div>
 				{% endfor %}
 				</div>
-				<div class="form-popup" id="myForm">
-  <form action="{% url 'login' %}" class="form-container" method="post" novalidate="novalidate">
-  	{% csrf_token %}
-    <h2>Login For More</h2>
-
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
-
-    <button type="submit" class="btn">Login</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    <a href="{% url 'signup' %}"><p >New User?? Signup Here!</p></a>
-  </form>
-</div>
-{% endif %}
-
-
 		</div>
 	</section>
-	<!-- Classes Section end -->
+
 
 	<!-- Trainer Section -->
 	<section class="trainer-section overflow-hidden spad">
