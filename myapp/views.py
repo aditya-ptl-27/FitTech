@@ -1,11 +1,15 @@
 from django.shortcuts import render,redirect
-from .models import User,Workout
+from .models import User,Workout,BlogModel
 from django.conf import settings
 from django.core.mail import send_mail
 import random
 from .form import *
 
 # Create your views here.
+
+def chat(request):
+	return render(request,'chat.html')
+
 def index(request):
 	try:
 		user=User.objects.get(email=request.session['email'])

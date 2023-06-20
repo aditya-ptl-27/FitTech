@@ -38,16 +38,16 @@
           {% endif %}
           <span id="email_error" style="color:blue;"></span>
           <br><br><br>
-            <form class="singup-form contact-form" action="{% url 'login' %}" method="post" novalidate="novalidate">
+            <form class="singup-form contact-form" action="{% url 'login' %}" method="post">
               {% csrf_token %}
               <center>
               <div class="col-md-9 form-group">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
               </div>
             </center>
             <center>
               <div class="col-md-9 form-group">
-                <input type="password" class="form-control" id="name" name="password" placeholder="Password">
+                <input type="password" class="form-control" id="name" name="password" placeholder="Password" required>
               </div>
             </center>
               

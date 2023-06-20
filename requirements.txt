@@ -1,8 +1,7 @@
 asgiref==3.6.0
 backports.zoneinfo==0.2.1
 Django==4.1.4
-geographiclib==2.0
-geopy==2.3.0
+django-froala-editor==4.0.19
 Pillow==9.3.0
 sqlparse==0.4.3
 tzdata==2022.7

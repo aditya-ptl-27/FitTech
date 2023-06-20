@@ -34,13 +34,13 @@
             {% endif %}
             <br><br>
 
-          <form action="{% url 'trainer_add_blog' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+          <form action="{% url 'trainer_add_blog' %}" class="singup-form contact-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
             
               <div class="form-group">
                 <label>Enter blog title</label>
-                <input type="text" class="form-control" placeholder="Enter title" name="title">
+                <input type="text" class="form-control" placeholder="Enter title" name="title" required>
 
                 {{form.media}}
                 {{form.as_p}}
@@ -48,7 +48,7 @@
               <div class="col-md-12">
                 <label>Choose Blog Image</label>
                 <label style="color:red;">(*Required)</label>
-                <input type="file" name="image" class="form-control" >
+                <input type="file" name="image" class="form-control" required >
             </div>
               
             <center>

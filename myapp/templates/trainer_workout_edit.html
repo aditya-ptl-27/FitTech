@@ -32,7 +32,7 @@
             <b style="color:blue;">{{msg}}</b>
             {% endif %}
             <br><br>
-          <form action="{% url 'trainer_workout_edit' pk=workout.pk %}"  class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+          <form action="{% url 'trainer_workout_edit' pk=workout.pk %}"  class="singup-form contact-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
             
@@ -50,12 +50,10 @@
               </div>
               <div class="row">
               <div class="col-md-6">
-                <input type="text" placeholder="Workout Name" name="w_name" value="{{workout.w_name}}">
+                <input type="text" placeholder="Workout Name" name="w_name" value="{{workout.w_name}}" required>
               </div>
               <div class="col-md-6">
-                <textarea name="w_description" placeholder="Workout Description" >
-                 {{workout.w_description}} 
-                </textarea>
+                <textarea name="w_description" placeholder="Workout Description" required>{{workout.w_description}}</textarea>
               </div>
               <div class="col-md-6">
                 <select name="w_difficulty" class="form-control" required>
@@ -66,7 +64,7 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <input type="text" placeholder="Muscles Targeted" name="w_muscles_targeted" value="{{workout.w_muscles_targeted}}">
+                <input type="text" placeholder="Muscles Targeted" name="w_muscles_targeted" value="{{workout.w_muscles_targeted}}" required>
               </div>
 
             <div class="col-md-6">
