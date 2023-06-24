@@ -59,7 +59,7 @@ img.profile {
 			</div>
 			<div class="container">
 				<ul class="main-menu">
-					<li><a href="{% url 'trainer_index' %}" class="active">Home</a></li>
+					<li><a href="{% url 'trainer_index' %}">Home</a></li>
 					<!-- <li><a href="{% url 'about' %}">About</a></li> -->
 					<li><a>Workouts</a>
 						{% if request.session.email %}
@@ -104,8 +104,7 @@ img.profile {
 						</ul>
 						{% endif %}
 					</li>
-					
-					<!-- <li><a href="{% url 'contact' %}">Contact</a></li> -->
+
 					{% if request.session.email %}
 							<li class="nav-item">
 								<a href="{% url 'trainer_profile' %}"><img src="{{user.profile_pic.url}}" class="img profile" width="40px" height="40px" style="margin-top: 5px;">

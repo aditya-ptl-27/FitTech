@@ -23,18 +23,19 @@
   <!-- Page top Section end -->
 
   <!-- Contact Section -->
+  <center>
   <section class="contact-page-section spad overflow-hidden">
     <div class="container">
       <div class="row">
-        <center>
-        <div class="col-lg-20">
-          <h2>Enter OTP</h2>
-          <h6>Sent OTP Might Be In Spam</h6>
+        
+        <div class="col-lg-6 m-auto text-white">
+          <h2 style="color:#f65d5d">Enter OTP</h2>
+          <h6 style="color:#f65d5d">Sent OTP Might Be In Spam</h6>
           {% if msg %}
             <b style="color:blue;">{{msg}}</b>
             {% endif %}
             <br><br>
-          <form action="{% url 'verify_otp' %}" class="singup-form contact-form" method="post" novalidate="novalidate" enctype="multipart/form-data">
+          <form action="{% url 'verify_otp' %}" class="singup-form contact-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
             
@@ -42,12 +43,9 @@
                 <input type="hidden" name="otp" value="{{otp}}">
                 <input type="hidden" name="email" value="{{email}}">
               <div class="col-md-12">
-                <input type="text" placeholder="Enter OTP" name="uotp">
+                <input type="text" placeholder="Enter OTP" name="uotp" required>
               </div>
-              
-            
             </div>
-            <center>
               <button type="submit" value="submit" class="site-btn sb-gradient">VERIFY OTP</button>
             </center>
           </form>
@@ -56,6 +54,7 @@
       </div>
     </div>
   </section>
+  <center>
   <!-- Trainers Section end -->
 
 

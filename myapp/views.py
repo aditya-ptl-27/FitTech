@@ -17,7 +17,7 @@ def index(request):
 			workout=Workout.objects.all()
 			blogs=BlogModel.objects.all()
 			trainer=User.objects.filter(usertype='trainer')
-			context={'workout':workout,'trainer':trainer,'blogs':blogs}
+			context={'workout':workout,'trainer':trainer,'blogs':blogs,'user':user}
 			return render(request,'index.html',context)
 		else:
 			return redirect('trainer_index')
@@ -116,7 +116,7 @@ def change_password(request):
 			if user.password==request.POST['old_password']:
 				if request.POST['new_password']==user.password:
 					msg='You Cannot Use Your Old Password'
-					return render(request,'change_password.html',{'msg':msg})
+					return render(request,'change_password.html',{'msg':msg,'user':user})
 				else:
 
 					if request.POST['new_password']==request.POST['cnew_password']:
@@ -129,13 +129,13 @@ def change_password(request):
 						return render(request,'login.html',{'msg':msg})
 					else:
 						msg='New Password And Confirm New Password Does Not Match'
-						return render(request,'change_password.html',{'msg':msg})
+						return render(request,'change_password.html',{'msg':msg,'user':user})
 			else:
 				msg='Old Password Is Incorrect'
-				return render(request,'change_password.html',{'msg':msg})
+				return render(request,'change_password.html',{'msg':msg,'user':user})
 
 		else:
-			return render(request,'change_password.html')
+			return render(request,'change_password.html',{'user':user})
 	else:
 		return redirect('trainer_change_password')
 
@@ -237,12 +237,13 @@ def trainer_index(request):
 		blogs=BlogModel.objects.filter(user=user)
 		workout=Workout.objects.filter(trainer=trainer)
 		trainers=User.objects.filter(usertype='trainer')
-		context={'workout':workout,'trainers':trainers,'blogs':blogs}
+		context={'workout':workout,'trainers':trainers,'blogs':blogs,'user':user}
 		return render(request,'trainer_index.html',context)
 	else:
 		return redirect('index')
 
 def trainer_add_workout(request):
+	user=User.objects.get(email=request.session['email'])
 	trainer=User.objects.get(email=request.session['email'])
 	if trainer.usertype=='trainer':
 		if request.method=='POST':
@@ -256,19 +257,20 @@ def trainer_add_workout(request):
 					w_muscles_targeted=request.POST['w_muscles_targeted']
 				)	
 			msg='Workout Added Successfully'
-			return render(request,'trainer_add_workout.html',{'msg':msg})
+			return render(request,'trainer_add_workout.html',{'msg':msg,'user':user})
 
 		else:
-			return render(request,'trainer_add_workout.html')
+			return render(request,'trainer_add_workout.html',{'user':user})
 	else:
 		return redirect('index')
 
 
 def trainer_view_workouts(request):
+	user=User.objects.get(email=request.session['email'])
 	trainer=User.objects.get(email=request.session['email'])
 	if trainer.usertype=='trainer':
 		workouts=Workout.objects.filter(trainer=trainer)
-		return render(request,'trainer_view_workouts.html',{'workouts':workouts})
+		return render(request,'trainer_view_workouts.html',{'workouts':workouts,'user':user})
 	else:
 		return redirect('home_workouts')
 
@@ -296,10 +298,10 @@ def trainer_workout_edit(request,pk):
 				pass
 			workout.save()
 			msg="Workout Updated Successfully"
-			return render(request,'trainer_workout_edit.html',{'workout':workout,'msg':msg})
+			return render(request,'trainer_workout_edit.html',{'workout':workout,'msg':msg,'user':user})
 
 		else:
-			return render(request,'trainer_workout_edit.html',{'workout':workout})
+			return render(request,'trainer_workout_edit.html',{'workout':workout,'user':user})
 	else:
 		return redirect('index')
 
@@ -343,7 +345,7 @@ def trainer_change_password(request):
 			if user.password==request.POST['old_password']:
 				if request.POST['new_password']==user.password:
 					msg='You Cannot Use Your Old Password'
-					return render(request,'trainer_change_password.html',{'msg':msg})
+					return render(request,'trainer_change_password.html',{'msg':msg,'user':user})
 				else:
 
 					if request.POST['new_password']==request.POST['cnew_password']:
@@ -353,17 +355,17 @@ def trainer_change_password(request):
 						del request.session['fname']
 						del request.session['profile_pic']
 						msg='Password Changed Successfully'
-						return render(request,'login.html',{'msg':msg})
+						return render(request,'login.html',{'msg':msg,'user':user})
 					else:
 						msg='New Password And Confirm New Password Does Not Match'
-						return render(request,'trainer_change_password.html',{'msg':msg})
+						return render(request,'trainer_change_password.html',{'msg':msg,'user':user})
 			else:
 				msg='Old Password Is Incorrect'
-				return render(request,'trainer_change_password.html',{'msg':msg})
+				return render(request,'trainer_change_password.html',{'msg':msg,'user':user})
 
 
 		else:
-			return render(request,'trainer_change_password.html')
+			return render(request,'trainer_change_password.html',{'user':user})
 	else:
 		return redirect('change_password')
 
@@ -371,7 +373,7 @@ def calculate_bmi(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request, 'calculate_bmi.html')
+			return render(request, 'calculate_bmi.html',{'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -381,7 +383,7 @@ def ideal_body_weight(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'ideal_body_weight.html')
+			return render(request,'ideal_body_weight.html',{'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -391,7 +393,7 @@ def daily_calorie_intake(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'daily_calorie_intake.html')
+			return render(request,'daily_calorie_intake.html',{'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -401,7 +403,7 @@ def calories_burnt(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'calories_burnt.html')
+			return render(request,'calories_burnt.html',{'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -412,7 +414,7 @@ def about(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			trainer=User.objects.filter(usertype='trainer')
-			return render(request,'about.html',{'trainer':trainer})
+			return render(request,'about.html',{'trainer':trainer,'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -423,7 +425,7 @@ def home_workouts(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'home_workouts.html')
+			return render(request,'home_workouts.html',{'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -434,7 +436,7 @@ def beginner_workouts(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_difficulty="Beginner")
-			return render(request,'beginner_workouts.html',{'workout':workout})
+			return render(request,'beginner_workouts.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -446,7 +448,7 @@ def intermediate_workouts(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_difficulty="Intermediate")
-			return render(request,'intermediate_workouts.html',{'workout':workout})
+			return render(request,'intermediate_workouts.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -458,7 +460,7 @@ def advanced_workouts(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_difficulty="Advanced")
-			return render(request,'advanced_workouts.html',{'workout':workout})
+			return render(request,'advanced_workouts.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -469,7 +471,7 @@ def trainer_home_workouts(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'home_workouts.html')
+			return render(request,'home_workouts.html',{'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -480,7 +482,7 @@ def full_body(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Full Body')
-			return render(request,'full_body.html',{'workout':workout})
+			return render(request,'full_body.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -492,7 +494,7 @@ def lower_body(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Lower Body')
-			return render(request,'lower_body.html',{'workout':workout})
+			return render(request,'lower_body.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -504,7 +506,7 @@ def weight_loss(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Weight Loss')
-			return render(request,'weight_loss.html',{'workout':workout})
+			return render(request,'weight_loss.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -516,7 +518,7 @@ def get_fit(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Get Fit')
-			return render(request,'get_fit.html',{'workout':workout})
+			return render(request,'get_fit.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -528,7 +530,7 @@ def build_muscle(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Build Muscle')
-			return render(request,'build_muscle.html',{'workout':workout})
+			return render(request,'build_muscle.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -540,7 +542,7 @@ def gain_strength(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Gain Strength')
-			return render(request,'gain_strength.html',{'workout':workout})
+			return render(request,'gain_strength.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -553,7 +555,7 @@ def upper_body(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			workout=Workout.objects.filter(w_type='Upper Body')
-			return render(request,'upper_body.html',{'workout':workout})
+			return render(request,'upper_body.html',{'workout':workout,'user':user})
 		else:
 			return redirect('trainer_view_workouts')
 	except:
@@ -572,7 +574,7 @@ def workout_detail(request,pk):
 			context={'workout':workout,
 					'trainer':trainer,
 					'latest_workouts':latest_workouts,
-					'latest_workouts_02':latest_workouts_02}
+					'latest_workouts_02':latest_workouts_02,'user':user}
 			return render(request,'workout_detail.html',context)
 
 		else:
@@ -585,7 +587,7 @@ def trainer(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			trainer=User.objects.filter(usertype='trainer')
-			return render(request,'trainer.html',{'trainer':trainer})
+			return render(request,'trainer.html',{'trainer':trainer,'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -597,7 +599,7 @@ def contact(request):
 	try:
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
-			return render(request,'contact.html')
+			return render(request,'contact.html',{'user':user})
 		else:
 			return redirect('trainer_index')
 	except:
@@ -608,7 +610,7 @@ def blog(request):
 		user=User.objects.get(email=request.session['email'])
 		if user.usertype=='user':
 			blogs=BlogModel.objects.all()
-			return render(request, 'blog.html',{'blogs':blogs,'trainer':trainer})
+			return render(request, 'blog.html',{'blogs':blogs,'trainer':trainer,'user':user})
 		else:
 			return redirect('trainer_view_blogs')
 	except:
@@ -625,7 +627,7 @@ def blog_detail(request, slug):
 			latest_blogs_02=BlogModel.objects.order_by("id")[:3]
 			print(trainer)
 			context = {'trainer':trainer,'latest_blogs':latest_blogs,
-					'latest_blogs_02':latest_blogs_02}
+					'latest_blogs_02':latest_blogs_02,'user':user}
 			try:
 				blog_obj = BlogModel.objects.filter(slug=slug).first()
 				context['blog_obj'] = blog_obj
@@ -652,8 +654,8 @@ def blog_detail(request, slug):
 def trainer_add_blog(request):
 	user=User.objects.get(email=request.session['email'])
 	if user.usertype=='trainer':
-		context = {'form': BlogForm}
-		context1={'form':BlogForm}
+		context = {'form': BlogForm,'user':user}
+		context1={'form':BlogForm,'user':user}
 		try:
 			if request.method == 'POST':
 				form = BlogForm(request.POST)
@@ -721,10 +723,10 @@ def trainer_blog_edit(request,slug):
 				pass
 			blog_obj.save()
 			msg="Blog Updated Successfully"
-			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'msg':msg,'form':form})
+			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'msg':msg,'form':form,'user':user})
 
 		else:
-			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'form':form})
+			return render(request,'trainer_blog_edit.html',{'blog_obj':blog_obj,'form':form,'user':user})
 	else:
 		return redirect('index')
 
